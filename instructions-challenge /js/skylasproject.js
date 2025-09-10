@@ -10,19 +10,19 @@
 
 function setup() {
     // A nice square canvas to work with
-    createCanvas(640, 640); //maps (0,0) in top left corner
-    background("#CFF800")
+    createCanvas(640, 640);
+    background("#c72828ff") // colour of canvas (hex, rgb, rgba)
 }
 
-function draw() { // draw is a loop 
+function draw() {
     // A grey background
     background(150, 150, 150);
 
     // The main part of the record is red
-    push(); //between push/pop, fill is the same. pop resets fill. stroke does the same. 
+    push();
     fill(255, 0, 0);
-    stroke(255, 255, 255); 
-    ellipse(320, 320, 480, 480); // x,y,width,height
+    stroke(255, 255, 255);
+    ellipse(320, 320, 480, 480);
     pop();
 
     // The label on the record
@@ -38,9 +38,4 @@ function draw() { // draw is a loop
     stroke(50, 50, 50);
     ellipse(320, 320, 20, 20);
     pop();
-
-    // the thingy on the record player
-    push(); 
-    rect(200, 80, 24, 32); // x-pos, y-pos, width, height
-    pop(); 
 }
