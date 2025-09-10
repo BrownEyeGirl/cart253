@@ -11,17 +11,18 @@
 function setup() {
     // A nice square canvas to work with
     createCanvas(640, 640);
+    background("#CFF800")
 }
 
-function draw() {
+function draw() { // draw is a loop 
     // A grey background
-    background(150, 150, 150);
+    background("#FF60AB");
 
     // The main part of the record is red
     push();
     fill(255, 0, 0);
     stroke(255, 255, 255);
-    ellipse(320, 320, 480, 480);
+    ellipse(320, 320, 480, 480); // x,y,width,height
     pop();
 
     // The label on the record
