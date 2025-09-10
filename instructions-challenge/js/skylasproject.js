@@ -21,6 +21,7 @@ function setup() {
 */
 function draw() {
     clouds(); 
+    illuminatiHouse();
 }
 
 
@@ -90,3 +91,38 @@ function clouds() {
     
 
 }
+
+
+function illuminatiHouse(){
+
+    // House
+    push();
+    noStroke();
+    fill("#4f261cff");
+    rect(300, 50, 30, 100); // Chimney
+    fill("#92b787ff")
+    rect(150, 150, 200, 200) // house base
+    fill("#3a1907ff")
+    rect(225, 270, 50, 80) // door
+    fill("#c2f1e7ff")
+    ellipse(200, 225, 50) // window left
+    ellipse(300, 225, 50) // window right
+    pop();
+    
+    // Roof
+    push();
+    noStroke();
+    fill("#0e6e0eff")
+    triangle(250, 50, 400, 180, 100, 180)
+    pop();
+    
+    // Eye
+    push();
+    noStroke();
+    fill("#ffffff");
+    ellipse(250, 120, 100, 50);
+    fill("#000000");
+    ellipse(250, 120, 40, 50);
+    pop();
+    
+    }
