@@ -20,6 +20,7 @@ function setup() {
  * Draws clouds, 
 */
 function draw() {
+    background("#D4F0F0");
     clouds(); 
     illuminatiHouse();
     
