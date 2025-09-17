@@ -83,7 +83,8 @@ function draw() {
 
   // Make him shakier 
   mrFurious.x = random(width/2+mrFurious.shake, width/2-mrFurious.shake);
-
+  mrFurious.shake += 3; 
+  
   // Draw Mr. Furious as a coloured circle
   push();
   noStroke();
