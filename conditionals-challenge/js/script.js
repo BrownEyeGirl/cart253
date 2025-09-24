@@ -82,13 +82,25 @@ const puck = {
 
     if(dist(user.x, user.y, puck.x, puck.y) < puck.size/2) {
 
-        let xfact = puck.x-user.x; 
+        let xfact = puck.x-user.x;  //
         let yfact = puck.y-user.y;  
         let fact = yfact/xfact;
 
         for(let i = 0; i < 100; i++) { // 
-            puck.y += (puck.x+0.1-puck.x)*fact*0.1; // moves puck 
-            puck.x += 0.1; 
+            if(puck.y > user.y) {
+                puck.y -= 0.1*fact; // moves puck 
+            }
+            else if(puck.y < user.y) {
+                puck.y += 0.1*fact; // moves puck
+            }
+
+            if(puck.x-user.x >= 0) {
+                puck.x += 0.1; 
+            }
+
+            else if(puck.x-user.x < 0) {
+                puck.x -= 0.1;
+            }
             //console.log("funct" + fact + "puck x" + puck.x + " puck y" + puck.y);
         }
 
