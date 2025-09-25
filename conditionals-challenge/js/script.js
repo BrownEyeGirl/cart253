@@ -6,6 +6,9 @@
  * on the canvas using their own circle.
  */
 
+    let velX = 0;
+    let velY = 0;
+
 const puck = {
     x: 200,
     y: 200,
@@ -75,14 +78,17 @@ const puck = {
 
   function movePuck() {
 
-    if(dist(user.x, user.y, puck.x, puck.y) < puck.size/2) {
-        let velX = 0.2;
-        let velY = 0.2;
+    // Calculate distance between circles' centres
+  const d = dist(user.x, user.y, puck.x, puck.y);
+  const overlap = (d < user.size/2 + puck.size/2);
 
-        if(puck.y >= user.y) {
-            velY *= 1; // moves puck down
 
-        }
+
+    if(overlap) {
+        console.log("overlap");
+        velX = 1;
+        velY = 1;
+
          if(puck.y < user.y) {
             velY *= -1; // moves puck up 
         }
@@ -91,14 +97,13 @@ const puck = {
             velX *= -1; // moves puck left 
         }
 
-        if(puck.x >= user.x) {
-            velX *= 1; // moves puck right
-        }
+        console.log("vel x" + velX + "vel y "+ velY);
     }
 
-   //puck.x += velX;
-   // puck.y += velY;
-
+   puck.x = velX + puck.x; 
+   console.log(puck.x);
+   puck.y += velY;
+  }
 
 
         //let circleX = constrain(mouseX, inner, width - inner);
@@ -151,8 +156,7 @@ const puck = {
 */
 
         
-    
-  } 
+
 
 
 
