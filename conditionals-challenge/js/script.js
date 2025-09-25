@@ -35,12 +35,12 @@ const puck = {
     
     // Move user circle
     moveUser();
+    movePuck(); 
     
     // Draw the user and puck
     drawUser();
     drawPuck();
 
-    movePuck(); 
   }
   
   /**
@@ -75,35 +75,101 @@ const puck = {
 
   function movePuck() {
 
+    if(dist(user.x, user.y, puck.x, puck.y) < puck.size/2) {
+        let velX = 0.2;
+        let velY = 0.2;
+
+        if(puck.y >= user.y) {
+            velY *= 1; // moves puck down
+
+        }
+         if(puck.y < user.y) {
+            velY *= -1; // moves puck up 
+        }
+
+        if(puck.x < user.x) {
+            velX *= -1; // moves puck left 
+        }
+
+        if(puck.x >= user.x) {
+            velX *= 1; // moves puck right
+        }
+    }
+
+   //puck.x += velX;
+   // puck.y += velY;
+
+
+
+        //let circleX = constrain(mouseX, inner, width - inner);
+       // let circleY = constrain(mouseY, inner, height - inner);
+        
+    
+
+        
+
+
+    //let a = atan2(abs(user.x-puck.y), abs(user.y-puck.y)); // finds angle 
+
    // let hype = sqrt((user.x - puck.x)**2 + (user.y-puck.y));
    // let ang = sin((user.y-puck.y) / hype); // opposite / hypotenous, hype
-    
    
+
+
+
+
+
+   /*
 
     if(dist(user.x, user.y, puck.x, puck.y) < puck.size/2) {
 
-        let xfact = puck.x-user.x;  //
-        let yfact = puck.y-user.y;  
-        let fact = yfact/xfact;
+    
 
-        for(let i = 0; i < 100; i++) { // 
-            if(puck.y > user.y) {
-                puck.y -= 0.1*fact; // moves puck 
-            }
-            else if(puck.y < user.y) {
-                puck.y += 0.1*fact; // moves puck
-            }
+        let xfact = abs(puck.x-user.x); 
+        let yfact = abs(puck.y-user.y);
 
-            if(puck.x-user.x >= 0) {
-                puck.x += 0.1; 
-            }
+        let scaleY = yfact/xfact;
+    }
+        
+        let vel = 2;
 
-            else if(puck.x-user.x < 0) {
-                puck.x -= 0.1;
-            }
-            //console.log("funct" + fact + "puck x" + puck.x + " puck y" + puck.y);
+        if(puck.y >= user.y) {
+            puck.y += vel; // moves puck down
+
+        }
+         if(puck.y < user.y) {
+            puck.y -= vel; // moves puck up 
         }
 
-    }
+        if(puck.x < user.x) {
+            puck.x -= vel; // moves puck left 
+        }
 
+        if(puck.x >= user.x) {
+            puck.x += vel; // moves puck right
+        }
+*/
+
+        
+    
   } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* GRAVEYARD 
+   
+    } */
