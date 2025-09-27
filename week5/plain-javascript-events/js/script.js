@@ -1,29 +1,57 @@
 /**
  * Plain Javascript Events
  * Skyla Trousdale 
- * HOW EMBARRASSING! I HAVE NO DESCRIPTION OF MY PROJECT!
- * PLEASE REMOVE A GRADE FROM MY WORK IF IT'S GRADED!
+ * 
  */
 
 "use strict";
+// The background colour
+const bg = {
+    fill: "#000000",
+    fills: {
+        black: "#000000",
+        white: "#ffffff"
+    },
+    switchKey: 32 // Space bar
+}
 
-const ball = {
-    x: 0,
-    y: 200,
-    size: 50
-};
-
+/**
+ * Create the canvas and set up event listener
+ */
 function setup() {
     createCanvas(400, 400);
+    
+    // Listen for key down
+    window.addEventListener("keydown", changeBG);
 }
 
+/**
+ * Fill the canvas
+ */
 function draw() {
-    background(0);
-    
-    ball.x += 1;
-    
-    push();
-    noStroke();
-    ellipse(ball.x, ball.y, ball.size);
-    pop();
+    background(bg.fill);
 }
+
+/**
+ * Switch the background
+ */
+function changeBG(event) { // NOTE the event parameter
+    // Use event.keyCode to check if they pressed the switching key...
+    if (event.keyCode === bg.switchKey) {
+        if (bg.fill === bg.fills.black) {
+            bg.fill = bg.fills.white;
+        }
+        else {
+            bg.fill = bg.fills.black;
+        }
+    }
+}
+
+/** Other plain event listeners 
+
+Mouse: mousedown, mouseup, mousemove, mouseenter, mouseleave, dblclick
+Keyboard: keydown, keyup
+Internet connection: online, offline
+Page: scroll
+
+*/
