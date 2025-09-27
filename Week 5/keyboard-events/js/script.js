@@ -21,6 +21,11 @@ const ball = {
         white: "#ffffff",
         red: "#ff0000",
         blue: "#0000ff"
+    },
+    // Keys that control the ball's colour
+    keys: {
+        redKey: 82, // R
+        blueKey: 66 // B
     }
 }
 
@@ -36,7 +41,7 @@ function setup() {
  */
 function draw() {
     background(0);
-
+  
     // Draw the ball
     push();
     noStroke();
@@ -44,3 +49,50 @@ function draw() {
     ellipse(ball.x, ball.y, ball.size);
     pop();
 }
+
+/**
+ * Handle keypress:
+ * - R = make the ball red
+ * - B = make the ball blue
+ */
+function keyPressed(event) {
+    if (event.keyCode === ball.keys.redKey) {
+        ball.fill = ball.fills.red;
+    }
+    else if (event.keyCode === ball.keys.blueKey) {
+        ball.fill = ball.fills.blue;
+    }
+}
+
+/**
+ * Handle keyreleased:
+ * - R or B = Set the ball back to default
+ */
+function keyReleased(event) {
+    if (event.keyCode === ball.keys.redKey || event.keyCode === ball.keys.blueKey) {
+        ball.fill = ball.fills.white;
+    }
+}
+/**
+ * Handle keypress:
+ * - R = make the ball red
+ * - B = make the ball blue
+ 
+function keyPressed(event) {
+    if (event.keyCode === 82) { // 82 is the ASCII key for "r" and "R", so it works for upper and lowercase
+        ball.fill = ball.fills.red;
+    }
+    else if (event.keyCode === 66) {
+        ball.fill = ball.fills.blue;
+    }
+}
+
+/**
+ * Handle keyreleased:
+ * - R or B = Set the ball back to default
+ 
+function keyReleased(event) {
+    if (event.keyCode === 82 || event.keyCode === 66) {
+        ball.fill = ball.fills.white;
+    }
+}*/
