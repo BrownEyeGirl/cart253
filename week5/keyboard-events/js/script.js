@@ -8,7 +8,7 @@
 "use strict";
 
 // Our ball
-const ball = {
+const ball = { // so we dont have to remember anything
     // Position
     x: 200,
     y: 200,
