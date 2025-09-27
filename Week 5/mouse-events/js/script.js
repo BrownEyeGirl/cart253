@@ -77,10 +77,3 @@ function mouseWheel(event) {
     // Constrain the size of the ball so it doesn't get silly
     ball.size = constrain(ball.size, 10, width);
 }
-
-/** Other Mouse Events 
-* mouseMoved() is called whenever the mouse moves
-* mouseDragged() is called whenever the mouse moves while the button is pressed down
-* mouseClicked() is called whenever the mouse is clicked (pressed and then released)
-* mouseDblClicked() is called whenever the mouse is clicked twice in a row quickly
-*/
