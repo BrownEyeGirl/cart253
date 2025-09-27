@@ -1,24 +1,37 @@
 /**
- * Title of Project
- * Author Name
+ * Introducing Events 
+ * Skyla Trousdale 
  * 
- * HOW EMBARRASSING! I HAVE NO DESCRIPTION OF MY PROJECT!
- * PLEASE REMOVE A GRADE FROM MY WORK IF IT'S GRADED!
  */
 
 "use strict";
 
-/**
- * OH LOOK I DIDN'T DESCRIBE SETUP!!
-*/
+
+
 function setup() {
-
-}
-
-
-/**
- * OOPS I DIDN'T DESCRIBE WHAT MY DRAW DOES!
-*/
-function draw() {
-
-}
+    createCanvas(400, 400);
+    
+    // Filling the background here so it DOESN'T
+    // happen every frame
+    background(0);
+  }
+  
+  function draw() { // draw() is an event handler that responds to next frame every 0.033 seconds
+    // This is empty!
+    // All the action happens when the mouse is pressed
+    // By not refilling the background every frame we can see
+    // the cumulative effect of the mouse presses!
+  }
+  
+  /**
+   * The mousePressed() function is AUTOMATICALLY CALLED BY p5
+   * whenever the mouse button is pressed down! Handy!
+   */
+  function mousePressed() {
+    // Draw an ellipse on the canvas when the mouse is pressed down
+    push();
+    noStroke();
+    fill(255, 255, 0);
+    ellipse(mouseX, mouseY, 50);
+    pop();
+  }
