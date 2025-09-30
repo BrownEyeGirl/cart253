@@ -75,6 +75,7 @@ function setup() {
     noStroke();
     background(255);
     img.loadPixels();
+    background(0, 200, 100);
 }
 
 function draw() {
@@ -86,11 +87,12 @@ function draw() {
 function drawPixBasic() { 
   
     /* Generates pixel for every row, column */
-    for(let x = 0; x < img.width; x+=15) {
-        for(let y = 0; y < img.height; y+=15) {
+    for(let x = 0; x < img.width; x+=15) { // columns for pix  
+        for(let y = 0; y < img.height; y+=15) { // rows for pix
+
             let sq = img.get(random(x-5, x+5), random(y+5, y-5)); // gets colour at x,y, shifts slightly by 10px at random for manic effect 
             fill(sq, 0); // fills each square with amount 
-            rect(x, y, pixH, pixW);
+            rect(x, y, pixH, pixW); // actually draw pixel 
         }
     }
 }
