@@ -20,7 +20,7 @@ function setup() {
  * Sets background, draws the eye
 */
 function draw() {
-    background(0); 
+    background(100); 
     push(); 
     full(255, 0, 0);
     ellipse(width/2, height/2, ellipseSize, ellipseSize); // height, width, built in variables that define the size of screen. 
