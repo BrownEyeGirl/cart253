@@ -61,9 +61,12 @@ let count;
 let pixH = 15; 
 let pixW = 15; 
 
+// sound 
+let synthArp = undefined; 
 
 function preload() {
   img = loadImage('assets/images/skyla.jpg');
+  synthArp = loadSound('assets/sounds/bark.wav');
 }
 
 function setup() {
@@ -76,11 +79,20 @@ function setup() {
     background(255);
     img.loadPixels();
     background(0, 200, 100);
+
+    // Play Music 
+    synthArp.play(); 
+    let startButton = createButton("play");
+    let stopButton = createButton("stop");
+    // set up what functions are when each button is clicked
+   // startButton.mousePressed(startMusic);
+    //stopButton.mousePressed(stopMusic);
+
 }
 
 function draw() {
     drawPixBasic(); 
-  
+    
 }
 
 
@@ -96,6 +108,22 @@ function drawPixBasic() {
         }
     }
 }
+
+function drawPixCol() {}
+
+
+
+
+/* SOUND PLAYGROUND */ 
+
+function startMusic() {
+  synthArp.play(); 
+}
+
+function stopMusic() {
+  synthArp.stop(); 
+}
+
 
 /*let x = random(img.width);
     let y = random(img.height);
