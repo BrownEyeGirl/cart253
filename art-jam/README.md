@@ -1,18 +1,19 @@
 # Template p5 Project
 
-Author Name
+Skyla Trousdale 
 
 [View this project online](URL_FOR_THE_RUNNING_PROJECT)
 
 ## Description
 
-This description should help the reader understand what the program is, what any controls do, and perhaps what the desired experience it.
-
+Interactive music visuals 
 ## Credits
 
 This bit should describe what tools were used. For example:
 
 This project uses [p5.js](https://p5js.org).
+- Volume - (Doc reference: https://p5js.org/reference/p5.MediaElement/volume/) 
+- 
 
 ## Attribution
 
