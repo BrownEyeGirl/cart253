@@ -57,6 +57,10 @@ let w;
 let h;
 let count; 
 
+// pixels
+let pixH = 15; 
+let pixW = 15; 
+
 
 function preload() {
   img = loadImage('assets/images/skyla.jpg');
@@ -74,19 +78,19 @@ function setup() {
 }
 
 function draw() {
-    drawPix(); 
+    drawPixBasic(); 
   
 }
 
 
-function drawPix() {
-    frameRate = 200;
-    console.log(img.width);
+function drawPixBasic() { 
+  
+    /* Generates pixel for every row, column */
     for(let x = 0; x < img.width; x+=15) {
         for(let y = 0; y < img.height; y+=15) {
             let sq = img.get(random(x-5, x+5), random(y+5, y-5)); // gets colour at x,y, shifts slightly by 10px at random for manic effect 
             fill(sq, 0); // fills each square with amount 
-            rect(x, y, 100, 100);
+            rect(x, y, pixH, pixW);
         }
     }
 }
