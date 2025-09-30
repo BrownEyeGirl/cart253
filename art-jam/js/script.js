@@ -59,12 +59,13 @@ let count;
 
 
 function preload() {
-  img = loadImage('assets/images/spooky.jpg');
+  img = loadImage('assets/images/skyla.jpg');
 }
 
 function setup() {
     count = 0
     w = img.width;
+    console.log(img.width + "h: " + img.height);
     h = img.height; 
     createCanvas(w, h);
     imageMode(CENTER);
@@ -74,17 +75,15 @@ function setup() {
 }
 
 function draw() {
-    frameRate = 20;
+    frameRate = 20000;
     let x = random(img.width);
     let y = random(img.height);
     count++; // for the red dots 
-    let minecraft = map(mouseX, 0, width, 10,70);// generates the squares
-    let blood = map(mouseX, 0, width, 10,50); 
+    let minecraft = map(mouseX, 0, width, 10,20);// generates the squares
 
     let sq = img.get(x, y);
     if(count % 7 == 0) {
         fill(200, 0, 0);
-        ellipse(x+20,y-30, blood, blood); 
 
         console.log("yay!")
     }
