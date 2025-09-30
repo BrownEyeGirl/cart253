@@ -80,19 +80,19 @@ function setup() {
     img.loadPixels();
     background(0, 200, 100);
 
-    // Play Music 
-    synthArp.play(); 
     let startButton = createButton("play");
     let stopButton = createButton("stop");
     // set up what functions are when each button is clicked
-   // startButton.mousePressed(startMusic);
-    //stopButton.mousePressed(stopMusic);
+   startButton.mousePressed(startMusic);
+    stopButton.mousePressed(stopMusic);
+    
 
 }
 
 function draw() {
     drawPixBasic(); 
-    
+    // Play Music 
+     
 }
 
 
