@@ -8,29 +8,47 @@
 
 
 let barkSFX = undefined; // variable to store "bark" sound, undefined because variable is currently empty 
+let dogPantingSFX = undefined;
+//let landlineSFX = undefined; 
+let bassLoop; 
+let slider; 
 
 /**
- * Load our bark sound
+ * Preload sounds 
  */
 function preload() {
-    // This is how you load a sound!
     // Note that loadSound() needs the PATH to your sound inside your project
-    // Note that the path is CASE SENSITIVE
-    // Note that the filename is CASE SENSITIVE
-    // Note the QUOTE MARKS around the path
+
     barkSFX = loadSound("assets/sounds/bark.wav");
+    dogPantingSFX = loadSound("assets/sounds/dogpanting.wav");
 }
 
 function setup() {
+    bassLoop = false;
+
     createCanvas(640, 480);
+
+    // BPM Slider 
+    slider = createSlider(0, 255);
+    slider.position(10, 10);
+    slider.size(80);
+
 }
 
 function draw() {
-    background(0);
+    background(100);
 }
 
 function mousePressed() {
     // This is how you play a sound!
     // It will play EACH TIME the user clicks
     barkSFX.play();
+    dogPantingSFX.play(); 
+}
+
+
+
+
+function bassLooop() {
+
 }
