@@ -1,8 +1,7 @@
 /**
- * Thinking like a computer with instructions
- * Pippin Barr
+ * Art Jam
  * 
- * An ultra simple example of instructions
+ * Art is the Jam! Interactive program where a selfie is manipulated in tandem with the style 
  */
 /**
  
@@ -24,23 +23,30 @@ let pixW = 15;
 
 // sound 
 let synthArp = undefined; 
+let bark = undefined; 
 let osc, playing, freq, amp;
 
 let freqMin, freqMax; 
 
 // visual pix design 
 let hard; 
-let slider, button1, button2; 
+let slider1, slider2, button1, button2; 
 
 // sound filter 
 let filter;
 let filterRes, filterFreq;  
 
+// drums  (sourced from docs: https://p5js.org/reference/p5.sound/p5.Phrase/#:~:text=A%20phrase%20is%20a%20pattern,another%20could%20be%20the%20bassline.)
+let pattern; 
+let myPhrase; 
+let myPart; 
+
 
 // preload files 
 function preload() {
-  img = loadImage('assets/images/skyla.jpg');
-  synthArp = loadSound('assets/sounds/depth.mp3'); //https://freesound.org/people/LoudKevin/sounds/827182/
+    img = loadImage('assets/images/skyla.jpg');
+    synthArp = loadSound('assets/sounds/depth.mp3'); //https://freesound.org/people/LoudKevin/sounds/827182/. BPM at 100, key F# Minor source: https://tunebat.com/Analyzer
+    bark = loadSound('assets/sounds/bark.wav');
 }
 
 // set up canvas, sound features 
@@ -51,8 +57,11 @@ function setup() {
 
     // Canvas 
     let cnv = createCanvas(w, h);
-    cnv.mousePressed(playOscillator);
+    //cnv.mousePressed(playOscillator); //disabled for drums 
+
     osc = new p5.Oscillator('sine');
+
+    cnv.mousePressed(beatIt);
 
     imageMode(CENTER);
     noStroke();
@@ -76,18 +85,32 @@ function setup() {
     button2.mousePressed(funk);
 
     // slider 
-    slider = createSlider(0, 255, 0);
-    slider.position(0, 200);
-    slider.size(80);
+    slider1 = createSlider(0, 255, 0);
+    slider1.position(0, 200);
+    slider1.size(80);
+
+    slider2 = createSlider(0, 255, 0);
+    slider2.position(0, 300);
+    slider2.size(80);
     
+
     // sound filter (from p5 example)
-    synthArp.loop(); 
+    synthArp.loop(); // MUTES MAIN SOUND 
+    synthArp.rate(map(slider2.value(), 0, 80, 1, 4));
     filter = new p5.HighPass();
     
     // Connect the sound file to the filter
     synthArp.disconnect();
     synthArp.connect(filter);
-    
+    synthArp.rate();
+    //console.log("bpm" + (filter.getBPM()));
+
+    // drums 
+    pattern = [1, 0, 0, 1, 2, 1, 1, 2]; 
+    myPhrase = new p5.Phrase('drums', stepIt, pattern); 
+    myPart = new p5.Part();
+    myPart.addPhrase(myPhrase);
+    myPart.setBPM(50);
      
 }
 
@@ -100,16 +123,13 @@ function draw() {
    
    if (playing) {
       osc.freq(freq, 0.1); // smooth the transitions by 0.1 seconds
-      osc.amp(amp, 0.1);
+      osc.amp(amp, 0.1); 
       
     }     
-
-   
     
-    filterFreq = map(slider.value(), 0, 80, 10, 500); // maps freq in Hz
+    filterFreq = map(slider1.value(), 0, 80, 10, 500); // maps freq in Hz, maps slider (0-80) onto desired frequency range
 
     filterRes = map(mouseY, 0, height, 10, 5);  // Map mouseY to resonance (volume boost) at the cutoff frequency
-    console.log("filres: " + filterRes);
 
     // set filter parameters
     filter.set(filterFreq, filterRes);
@@ -122,9 +142,9 @@ function draw() {
 function drawPixBasic() { 
   
     /* Generates pixel for every row, column */
-    for(let x = 0; x < img.width; x+=map(slider.value(), 1, 80*2, 5, pixW)) { // columns for pix  
+    for(let x = 0; x < img.width; x+=map(slider1.value(), 1, 80*2, 5, pixW)) { // columns for pix  
         //for(let y = 0; y < img.height; y+=map(freq, freqMin, freqMax, 5, pixH)) { // rows for pix
-        for(let y = 0; y < img.height; y+=map(slider.value(), 1, 80*2, 5, pixH)) { // rows for pix
+        for(let y = 0; y < img.height; y+=map(slider1.value(), 1, 80*2, 5, pixH)) { // rows for pix
             //console.log(slider.value());
 
             let sq = img.get(random(x-5, x+5), random(y+5, y-5)); // gets colour at x,y, shifts slightly by 10px at random for manic effect 
@@ -168,6 +188,15 @@ function harden() {
 /* Function wo Function */
 function funk() {
     
+}
+
+function stepIt(time, playbackRate) {
+    bark.rate(playbackRate);
+    bark.play(time);}
+
+function beatIt(){
+    userStartAudio(); 
+    myPart.start(); 
 }
 
 
