@@ -12,46 +12,7 @@
 
 "use strict";
 
-/**
-
-let h; 
-let w; 
-
-let col = {
-    r: 255, 
-    g: 55, 
-    b: 0
-}
-
-function setup() {
-
-    w = 600; 
-    h = 400; 
-    createCanvas(w, h);
-    
-
-}
-
-let img;
-
-function preload() {
-    img = loadImage('assets/images/trees.jpg');
-}
-
-
-/**
- * Draw symetrical circles (reflected on y)
-
-function draw() {
-    background(200);
-    text("The image would be loaded below:", 20, 20);
-    image(img, 20, 40, 200,200);
-
-}
-
-*/
-
-
+// canvas vars 
 let img;
 let w;
 let h;
@@ -69,13 +30,20 @@ let freqMin, freqMax;
 
 // visual pix design 
 let hard; 
+let slider, button1, button2; 
 
+// sound filter 
+let filter;
+let filterRes, filterFreq;  
+
+
+// preload files 
 function preload() {
   img = loadImage('assets/images/skyla.jpg');
-  //synthArp = loadSound('assets/sounds/bark.wav');
-  //synthArp = loadSound('assets/syntharpeggio.wav');
+  synthArp = loadSound('assets/sounds/depth.mp3'); //https://freesound.org/people/LoudKevin/sounds/827182/
 }
 
+// set up canvas, sound features 
 function setup() {
     count = 0;
     w = img.width;
@@ -99,46 +67,71 @@ function setup() {
     hard = true; 
 
     // buttons 
-    let button = createButton('click me');
-    button.position(0, 100);
-    button.mousePressed(harden); 
-    
+    button1 = createButton('hard/soft');
+    button1.position(0, 100);
+    button1.mousePressed(harden); 
 
+    button2 = createButton('invert');
+    button2.position(0, 150);
+    button2.mousePressed(funk);
+
+    // slider 
+    slider = createSlider(0, 255, 0);
+    slider.position(0, 200);
+    slider.size(80);
+    
+    // sound filter (from p5 example)
+    synthArp.loop(); 
+    filter = new p5.HighPass();
+    
+    // Connect the sound file to the filter
+    synthArp.disconnect();
+    synthArp.connect(filter);
+    
+     
 }
+
 
 function draw() {
     drawPixBasic(); 
     // Play Music 
     freq = constrain(map(mouseX, 0, width, freqMin, freqMax), freqMin, freqMax);
     amp = constrain(map(mouseY, height, 0, 0, 1), 0, 1);
-  
-    text('tap to play', 20, 20);
-    text('freq: ' + freq, 20, 40);
-    text('amp: ' + amp, 20, 60);
-
-    console.log("freq:" + freq);
-    console.log("mousex: " + mouseX);
    
    if (playing) {
       osc.freq(freq, 0.1); // smooth the transitions by 0.1 seconds
       osc.amp(amp, 0.1);
       
     }     
+
+   
+    
+    filterFreq = map(slider.value(), 0, 80, 10, 500); // maps freq in Hz
+
+    filterRes = map(mouseY, 0, height, 10, 5);  // Map mouseY to resonance (volume boost) at the cutoff frequency
+    console.log("filres: " + filterRes);
+
+    // set filter parameters
+    filter.set(filterFreq, filterRes);
+    
 }
 
 /* VISUALIZER PLAYGROUND */ 
 
+/* Draws Pixel Grid */
 function drawPixBasic() { 
   
     /* Generates pixel for every row, column */
-    for(let x = 0; x < img.width; x+=map(freq, freqMin, freqMax, 5, pixW)) { // columns for pix  
-        for(let y = 0; y < img.height; y+=map(freq, freqMin, freqMax, 5, pixH)) { // rows for pix
+    for(let x = 0; x < img.width; x+=map(slider.value(), 1, 80*2, 5, pixW)) { // columns for pix  
+        //for(let y = 0; y < img.height; y+=map(freq, freqMin, freqMax, 5, pixH)) { // rows for pix
+        for(let y = 0; y < img.height; y+=map(slider.value(), 1, 80*2, 5, pixH)) { // rows for pix
+            //console.log(slider.value());
 
             let sq = img.get(random(x-5, x+5), random(y+5, y-5)); // gets colour at x,y, shifts slightly by 10px at random for manic effect 
             
             push();
             fill(sq, 0); // fills each square with amount 
-            console.log(sq);
+            //console.log(sq);
             if(hard === true) {
                 rect(x, y, pixH, pixW); // actually draw pixel 
             }
@@ -152,21 +145,30 @@ function drawPixBasic() {
 
 function drawPixCol() {}
 
-function harden() {
-    hard = !hard; 
-}
-
 
 /* SOUND PLAYGROUND */
+
+/* Starts Annoying Sound */
 function playOscillator() {
     osc.start();
     playing = true;
   }
   
-  function mouseReleased() {
+/* Fades when released */ 
+function mouseReleased() {
     osc.amp(0, 0.5); // ramp up amplitude to 0 over 0.5 seconds
     playing = false;
-  }
+}
+
+/* Triggered when hard/soft button pressed */
+function harden() {
+    hard = !hard; 
+}
+
+/* Function wo Function */
+function funk() {
+    
+}
 
 
 
