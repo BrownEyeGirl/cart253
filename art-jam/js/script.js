@@ -65,15 +65,19 @@ let pixW = 15;
 let synthArp = undefined; 
 let osc, playing, freq, amp;
 
-let freqMin, freqMax;
+let freqMin, freqMax; 
+
+// visual pix design 
+let hard; 
 
 function preload() {
   img = loadImage('assets/images/skyla.jpg');
   //synthArp = loadSound('assets/sounds/bark.wav');
+  //synthArp = loadSound('assets/syntharpeggio.wav');
 }
 
 function setup() {
-    count = 0
+    count = 0;
     w = img.width;
     h = img.height; 
 
@@ -86,17 +90,18 @@ function setup() {
     noStroke();
     background(255);
     img.loadPixels();
-    //background(0, 200, 100);
-
-    //let startButton = createButton("play");
-    //let stopButton = createButton("stop");
-    // set up what functions are when each button is clicked
-    //startButton.mousePressed(startMusic);
-    //stopButton.mousePressed(stopMusic);
 
     // set up freq
     freqMin = 100;
     freqMax = 500; 
+
+    // visual pix design 
+    hard = true; 
+
+    // buttons 
+    let button = createButton('click me');
+    button.position(0, 100);
+    button.mousePressed(harden); 
     
 
 }
@@ -126,17 +131,30 @@ function draw() {
 function drawPixBasic() { 
   
     /* Generates pixel for every row, column */
-    for(let x = 0; x < img.width; x+=map(freq, freqMin, freqMax, 10, pixW)) { // columns for pix  
-        for(let y = 0; y < img.height; y+=map(freq, freqMin, freqMax, 10, pixH)) { // rows for pix
+    for(let x = 0; x < img.width; x+=map(freq, freqMin, freqMax, 5, pixW)) { // columns for pix  
+        for(let y = 0; y < img.height; y+=map(freq, freqMin, freqMax, 5, pixH)) { // rows for pix
 
             let sq = img.get(random(x-5, x+5), random(y+5, y-5)); // gets colour at x,y, shifts slightly by 10px at random for manic effect 
+            
+            push();
             fill(sq, 0); // fills each square with amount 
-            rect(x, y, pixH, pixW); // actually draw pixel 
+            console.log(sq);
+            if(hard === true) {
+                rect(x, y, pixH, pixW); // actually draw pixel 
+            }
+            else {
+                ellipse(x, y, pixH, pixW);
+            }
+            pop();  //The origin is back to (0, 0) and rotation is back to 0.
         }
     }
 }
 
 function drawPixCol() {}
+
+function harden() {
+    hard = !hard; 
+}
 
 
 /* SOUND PLAYGROUND */
