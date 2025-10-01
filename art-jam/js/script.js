@@ -126,8 +126,8 @@ function draw() {
 function drawPixBasic() { 
   
     /* Generates pixel for every row, column */
-    for(let x = 0; x < img.width; x+=pixW) { // columns for pix  
-        for(let y = 0; y < img.height; y+=pixH) { // rows for pix
+    for(let x = 0; x < img.width; x+=map(freq, freqMin, freqMax, 10, pixW)) { // columns for pix  
+        for(let y = 0; y < img.height; y+=map(freq, freqMin, freqMax, 10, pixH)) { // rows for pix
 
             let sq = img.get(random(x-5, x+5), random(y+5, y-5)); // gets colour at x,y, shifts slightly by 10px at random for manic effect 
             fill(sq, 0); // fills each square with amount 
@@ -145,12 +145,22 @@ function playOscillator() {
     playing = true;
   }
   
-  
   function mouseReleased() {
-    
     osc.amp(0, 0.5); // ramp up amplitude to 0 over 0.5 seconds
     playing = false;
   }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*
