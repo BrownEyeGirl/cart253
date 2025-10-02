@@ -6,7 +6,8 @@ Skyla Trousdale
 
 ## Description
 
-Interactive music visuals, self portrait of me
+Music! Visuals! Click on the image to begin the randomly generated beat, then toggle with the slide to change what tones you hear. Volume on!! The buttons control the visuals 
+
 
 ## Credits
 
