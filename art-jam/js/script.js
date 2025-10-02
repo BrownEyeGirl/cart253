@@ -95,7 +95,7 @@ function setup() {
     button2.mousePressed(invertImg); 
 
     // slider 
-    slider1 = createSlider(0, 255, 0);
+    slider1 = createSlider(0, 255, 50); // starts slider at 50 
     slider1.position(0, 200);
     slider1.size(80);
 
