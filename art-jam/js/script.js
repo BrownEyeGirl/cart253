@@ -47,7 +47,7 @@ let myPart;
 // preload files 
 function preload() {
     img = loadImage('assets/images/skyla.jpg');
-    synthArp = loadSound('assets/sounds/depth.mp3'); //https://freesound.org/people/LoudKevin/sounds/827182/. BPM at 100, key F# Minor source: https://tunebat.com/Analyzer
+    synthArp = loadSound('assets/sounds/synthrhyth.m4a'); //https://freesound.org/people/f-r-a-g-i-l-e/sounds/484045/. BPM at 100, key F# Minor source: https://tunebat.com/Analyzer
     kick = loadSound('assets/sounds/kick.wav'); 
 }
 
@@ -63,7 +63,7 @@ function setup() {
 
     osc = new p5.Oscillator('sine'); // not used atm 
 
-    cnv.mousePressed(beatIt);
+    cnv.mousePressed(beatIt); // starts drums when canvas pressed 
 
     // image settings
     imageMode(CENTER);
@@ -90,27 +90,28 @@ function setup() {
     button1.position(0, 100);
     button1.mousePressed(harden); 
 
-   /* button2 = createButton('invert');
+    button2 = createButton('invert');
     button2.position(0, 150);
-    button2.mousePressed(funk); */
+    button2.mousePressed(invertImg); 
 
     // slider 
     slider1 = createSlider(0, 255, 0);
     slider1.position(0, 200);
     slider1.size(80);
-    text('Slide1: ', 0, 200);
 
-    slider2 = createSlider(0, 255, 0);
+    // to use for later
+    /*slider2 = createSlider(0, 255, 0);
     slider2.position(0, 300);
-    slider2.size(80);
-    slider2.mouseClicked(invertImg); // interaction, when slider used image inverts
+    slider2.size(80);*/
+    //slider2.mouseClicked(invertImg); // interaction, when slider used image inverts
     
 
     // sound filter (from p5 example)
     synthArp.loop(); // MUTES MAIN SOUND 
-    synthArp.rate(map(slider2.value(), 0, 80, 1, 4)); //broken 
-    console.log("slider: " + map(slider2.value(), 0, 80, 1, 4)); 
-    filter = new p5.HighPass();
+    //synthArp.rate(map(slider2.value(), 0, 80, 1, 4)); //broken 
+    //console.log("slider: " + map(slider2.value(), 0, 80, 1, 4)); 
+    filter = new p5.BandPass();
+
     
     // Connect the sound file to the filter
     synthArp.disconnect();
@@ -119,11 +120,11 @@ function setup() {
     //console.log("bpm" + (filter.getBPM()));
 
     // drums (code from p5 DOCS: )
-    pattern = [1, 0, 1, 0, 1, 0, 1, 0]; // drum pattern 
+    pattern = [random(0, 2), random(0, 2), random(0, 2), random(0, 2), random(0, 2), random(0, 2), random(0, 2), 0]; // drum pattern 
     myPhrase = new p5.Phrase('drums', stepIt, pattern); // creates a new phrase called drums, calls stepIt to 
     myPart = new p5.Part(); 
     myPart.addPhrase(myPhrase);
-    myPart.setBPM(100);     
+    myPart.setBPM(60);     
 }
 
 
@@ -228,8 +229,10 @@ function stepIt(time, playbackRate) {
 }
 
 function beatIt(){
+    pattern = [random(0, 4), random(0, 4), random(0, 4), random(0, 4), random(0, 4), random(0, 4), random(0, 4), random(0,4)]; // drum pattern 
     userStartAudio(); 
-    myPart.start(); 
+    //myPart.setVolume(0.5);
+    myPart.loop(); 
 }
 
 
