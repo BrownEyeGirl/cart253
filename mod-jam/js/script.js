@@ -15,7 +15,19 @@
 
 "use strict";
 
-// Our frog
+// Canvas
+
+
+// Game Funct
+let gameState = "start";
+let score = 0; 
+let timer = {
+    startTime: 5000,
+    timePassed: 0,
+    timeInterval: 50000
+}
+
+// Frog
 const frog = {
     // The frog's body has a position and size
     body: {
@@ -23,8 +35,8 @@ const frog = {
         y: 520,
         size: 150
     },
-    // The frog's tongue has a position, size, speed, and state
-    tongue: {
+
+    tongue: {    // The frog's tongue has a position, size, speed, and state
         x: undefined,
         y: 480,
         size: 20,
@@ -34,45 +46,93 @@ const frog = {
     }
 };
 
-// Our fly
-// Has a position, size, and speed of horizontal movement
-const fly = {
+// Fly
+const fly = { // Has a position, size, and speed of horizontal movement
     x: 0,
     y: 200, // Will be random
     size: 10,
     speed: 3
 };
 
-/**
- * Creates the canvas and initializes the fly
- */
+/** Creates the canvas and initializes the fly */
 function setup() {
     createCanvas(640, 480);
+
+    background(0);
+    setTimeout(startTheGame(),5000); // runs startTheGame() after 5000 miliseconds, 
 
     // Give the fly its first random position
     resetFly();
 }
+function startTheGame() {
+    gameState = "play";
+}
 
 function draw() {
-    background("#87ceeb");
+
+    // timing
+    console.log(millis()) // game starts at 5k millis, in the gamestate the start time was 5k
+
+    /* Activating Gamestates */
+    if(gameState==="start") {
+        startScreen();
+    }
+
+    else if(gameState==="play") {
+        gameScreen(); 
+    }
+
+    else if(gameState==="end") {
+        endScreen();
+    }
+    
+}
+
+
+
+/* GAME FUNCTIONS */ 
+function startScreen() {
+    background(0); 
+}
+
+function gameScreen() {
+    console.log("in game screen"); 
+    background(0, 100, 200);
+    displayTimer(); 
+    // from 'draw'
+   // background("#87ceeb");
     moveFly();
     drawFly();
     moveFrog();
     moveTongue();
     drawFrog();
     checkTongueFlyOverlap();
-}
 
-/* GAME FUNCTIONS */ 
-function startScreen() {
-    
-}
+    timer.timePassed = millis() - timer.startTime;
 
-function gameScreen() {
-
+    if(timer.timePassed > timer.timeInterval) {
+        gameState = "end"; 
+    }
 }
 
 function endScreen() {
+    background(0, 0, 0);
+}
+
+function displayScore() {
+    push(); 
+
+    pop(); 
+}
+
+function displayTimer() {
+    push(); 
+    textSize(24); 
+    text(10-floor(timer.timePassed/1000), width/2, height/2);
+    pop(); 
+}
+
+function keepScore() {
 
 }
 
@@ -143,6 +203,8 @@ function moveTongue() {
     }
 }
 
+
+
 /**
  * Displays the tongue (tip and line connection) and the frog (body)
  */
@@ -182,6 +244,10 @@ function checkTongueFlyOverlap() {
         resetFly();
         // Bring back the tongue
         frog.tongue.state = "inbound";
+
+        // Keep score
+        score++; 
+        console.log("score: " + score);
     }
 }
 
