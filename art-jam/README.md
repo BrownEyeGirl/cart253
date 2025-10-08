@@ -10,6 +10,7 @@ Volume on! Music! Visuals! CLICK ON THE IMAGE TO BEGIN the randomly generated be
 
 This project was my personal exploration of the sound and image library. Some code is commented out from earlier versions and experiments.
 
+![alt text](image.png)
 
 ## Credits
 
