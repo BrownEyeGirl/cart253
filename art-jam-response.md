@@ -1,4 +1,8 @@
-
+  
+Skyla Trousdale  
+CART 253  
+Oct 15, 2025  
+Art Jam Response 
 
 Project 1:   
 [https://leahiscoding.github.io/CART-253/art-jam/](https://leahiscoding.github.io/CART-253/art-jam/)  
