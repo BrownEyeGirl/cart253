@@ -310,6 +310,11 @@ function drawFlyTrap() { // Displays the tongue (tip and line connection) and th
     pop();
 }
 
+/* Animate "gulp" */ 
+function gulp() {
+    // Fly swallowed 
+}
+
 
 /* Sky Graphics */ 
 function drawSky() {
