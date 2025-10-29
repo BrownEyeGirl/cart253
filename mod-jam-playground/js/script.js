@@ -2,10 +2,10 @@
  * Debugging
  * Skyla Trousdale and Pippin Barr
  * 
- * A game of catching flies with your frog-tongue
+ * A game of catching flies with your flyTrap-tongue
  * 
  * Instructions:
- * - Move the frog with your mouse
+ * - Move the flyTrap with your mouse
  * - Click to launch the tongue
  * - Catch flies
  * 
@@ -30,16 +30,16 @@ let timer = {
 }
 
 
-// Frog
-const frog = {
-    // The frog's body has a position and size
+// flyTrap
+const flyTrap = {
+    // The flyTrap's body has a position and size
     body: {
         x: 320,
         y: 520,
         size: 150
     },
 
-    tongue: {    // The frog's tongue has a position, size, speed, and state
+    tongue: {    // The flyTrap's tongue has a position, size, speed, and state
         x: undefined,
         y: 480,
         size: 20,
@@ -116,9 +116,9 @@ function gameScreen() {
    // background("#87ceeb");
     moveFly();
     drawFly();
-    moveFrog();
+    moveFlyTrap();
     moveTongue();
-    drawFrog();
+    drawFlyTrap();
     checkTongueFlyOverlap();
 
     timer.timePassed = millis() - timer.startTime;
@@ -194,14 +194,14 @@ function resetFly() {
 /* Handles the tongue overlapping the fly */
 function checkTongueFlyOverlap() {
     // Get distance from tongue to fly
-    const d = dist(frog.tongue.x, frog.tongue.y, fly.x, fly.y);
+    const d = dist(flyTrap.tongue.x, flyTrap.tongue.y, fly.x, fly.y);
     // Check if it's an overlap
-    const eaten = (d < frog.tongue.size/2 + fly.size/2);
+    const eaten = (d < flyTrap.tongue.size/2 + fly.size/2);
     if (eaten) {
         // Reset the fly
         resetFly();
         // Bring back the tongue
-        frog.tongue.state = "inbound";
+        flyTrap.tongue.state = "inbound";
 
         // Keep score
         score++; 
@@ -211,8 +211,8 @@ function checkTongueFlyOverlap() {
 
 /* Launch the tongue on click (if it's not launched yet) */
 function mousePressed() {
-    if (frog.tongue.state === "idle") {
-        frog.tongue.state = "outbound";
+    if (flyTrap.tongue.state === "idle") {
+        flyTrap.tongue.state = "outbound";
     }
 }
 
@@ -227,9 +227,9 @@ function mousePressed() {
 
 /* ANIMATION */ 
 
-/* Moves frog */
-function moveFrog() { // Moves the frog to the mouse position on x 
-    frog.body.x = mouseX;
+/* Moves flyTrap */
+function moveFlyTrap() { // Moves the flyTrap to the mouse position on x 
+    flyTrap.body.x = mouseX;
 }
 
 /* Moves fly */
@@ -244,26 +244,26 @@ function moveFly() { // Moves the fly according to its speed, Resets the fly if 
 
 /* Moves tongue */
 function moveTongue() { // Handles moving the tongue based on its state
-    // Tongue matches the frog's x
-    frog.tongue.x = frog.body.x;
+    // Tongue matches the flyTrap's x
+    flyTrap.tongue.x = flyTrap.body.x;
     // If the tongue is idle, it doesn't do anything
-    if (frog.tongue.state === "idle") {
+    if (flyTrap.tongue.state === "idle") {
         // Do nothing
     }
     // If the tongue is outbound, it moves up
-    else if (frog.tongue.state === "outbound") {
-        frog.tongue.y += -frog.tongue.speed;
+    else if (flyTrap.tongue.state === "outbound") {
+        flyTrap.tongue.y += -flyTrap.tongue.speed;
         // The tongue bounces back if it hits the top
-        if (frog.tongue.y <= 0) {
-            frog.tongue.state = "inbound";
+        if (flyTrap.tongue.y <= 0) {
+            flyTrap.tongue.state = "inbound";
         }
     }
     // If the tongue is inbound, it moves down
-    else if (frog.tongue.state === "inbound") {
-        frog.tongue.y += frog.tongue.speed;
+    else if (flyTrap.tongue.state === "inbound") {
+        flyTrap.tongue.y += flyTrap.tongue.speed;
         // The tongue stops if it hits the bottom
-        if (frog.tongue.y >= height) {
-            frog.tongue.state = "idle";
+        if (flyTrap.tongue.y >= height) {
+            flyTrap.tongue.state = "idle";
         }
     }
 }
@@ -283,28 +283,28 @@ function drawFly() {
     pop();
 }
 
-/* Draw frog */
-function drawFrog() { // Displays the tongue (tip and line connection) and the frog (body)
+/* Draw Venus Fly Trap */
+function drawFlyTrap() { // Displays the tongue (tip and line connection) and the flyTrap (body)
     
     // Tongue tip 
     push();
     fill("#ff0000");
     noStroke();
-    ellipse(frog.tongue.x, frog.tongue.y, frog.tongue.size);
+    ellipse(flyTrap.tongue.x, flyTrap.tongue.y, flyTrap.tongue.size);
     pop();
 
     // Tongue body 
     push();
     stroke("#ff0000");
-    strokeWeight(frog.tongue.size);
-    line(frog.tongue.x, frog.tongue.y, frog.body.x, frog.body.y);
+    strokeWeight(flyTrap.tongue.size);
+    line(flyTrap.tongue.x, flyTrap.tongue.y, flyTrap.body.x, flyTrap.body.y);
     pop();
 
-    // Frog's body
+    // Fly Trap's body
     push();
     fill("#00ff00");
     noStroke();
-    ellipse(frog.body.x, frog.body.y, frog.body.size);
+    ellipse(flyTrap.body.x, flyTrap.body.y, flyTrap.body.size);
     pop();
 }
 
