@@ -19,6 +19,7 @@
 let backgroundImg; 
 
 // Game Funct
+let button;
 let gameState = "start";
 let score = 0; 
 let topScore = 0; 
@@ -28,7 +29,6 @@ let timer = {
     timeInterval: 10000
 }
 
-let button;
 
 // Frog
 const frog = {
@@ -44,8 +44,7 @@ const frog = {
         y: 480,
         size: 20,
         speed: 20,
-        // Determines how the tongue moves each frame
-        state: "idle" // State can be: idle, outbound, inbound
+        state: "idle" // State can be: idle, outbound, inbound (determines how the tongue moves each frame)
     }
 };
 
@@ -72,17 +71,6 @@ function setup() {
     // Reset Game 
     resetFly();
 }
-function startTheGame() {
-    gameState = "play";
-    button.hide();
-    timer.timePassed = 0; 
-    timer.timeInterval = 10000 + millis();
-    timer.startTime = 2000 + millis();
-    if(score > topScore) {
-        topScore = score; 
-    }
-    score = 0; 
-}
 
 function draw() {
 
@@ -106,19 +94,19 @@ function draw() {
 
 
 
-/* GAME FUNCTIONS */ 
+/* SCREENS */  
+
+/* Loading screen */ 
 function startScreen() {
     background(0, 200,200); 
     delayTime(500000000);
 }
 
+/* Playing screen */ 
 function gameScreen() {
     console.log("in game screen"); 
 
-    // Sky graphics 
     drawSky(); 
-
-
     displayTimer();
     displayScore();
     if(topScore > 0) {
@@ -135,17 +123,39 @@ function gameScreen() {
 
     timer.timePassed = millis() - timer.startTime;
 
-    //if(timer.timePassed > timer.timeInterval) {
     if(10-floor(timer.timePassed/1000) <= 0) {
         gameState = "end"; 
     }
 }
 
+/* Gameover screen */ 
 function endScreen() {
     background(0, 0, 0);
     button.show();
     button.position(width/2, height/2);
     button.mousePressed(startTheGame);
+}
+
+
+
+
+
+
+
+
+/* GAME FUNCTIONS */ 
+
+/* Starts the game */ 
+function startTheGame() {
+    gameState = "play";
+    button.hide();
+    timer.timePassed = 0; 
+    timer.timeInterval = 10000 + millis();
+    timer.startTime = 2000 + millis();
+    if(score > topScore) {
+        topScore = score; 
+    }
+    score = 0; 
 }
 
 /* Displays Score */
@@ -166,7 +176,6 @@ function displayTopScore() {
     pop(); 
 }
 
-
 /* Displays Timer */
 function displayTimer() {
     push(); 
@@ -175,15 +184,56 @@ function displayTimer() {
     pop(); 
 }
 
-function keepScore() {
 
+/* Resets the fly to the left with a random y */
+function resetFly() {
+    fly.x = 0;
+    fly.y = random(0, 300);
 }
 
-/**
- * Moves the fly according to its speed
- * Resets the fly if it gets all the way to the right
- */
-function moveFly() {
+/* Handles the tongue overlapping the fly */
+function checkTongueFlyOverlap() {
+    // Get distance from tongue to fly
+    const d = dist(frog.tongue.x, frog.tongue.y, fly.x, fly.y);
+    // Check if it's an overlap
+    const eaten = (d < frog.tongue.size/2 + fly.size/2);
+    if (eaten) {
+        // Reset the fly
+        resetFly();
+        // Bring back the tongue
+        frog.tongue.state = "inbound";
+
+        // Keep score
+        score++; 
+        console.log("score: " + score);
+    }
+}
+
+/* Launch the tongue on click (if it's not launched yet) */
+function mousePressed() {
+    if (frog.tongue.state === "idle") {
+        frog.tongue.state = "outbound";
+    }
+}
+
+
+
+
+
+
+
+
+
+
+/* ANIMATION */ 
+
+/* Moves frog */
+function moveFrog() { // Moves the frog to the mouse position on x 
+    frog.body.x = mouseX;
+}
+
+/* Moves fly */
+function moveFly() { // Moves the fly according to its speed, Resets the fly if it gets all the way to the right
     // Move the fly
     fly.x += fly.speed;
     // Handle the fly going off the canvas
@@ -192,36 +242,8 @@ function moveFly() {
     }
 }
 
-/**
- * Draws the fly as a black circle
- */
-function drawFly() {
-    push();
-    noStroke();
-    fill("#000000");
-    ellipse(fly.x, fly.y, fly.size);
-    pop();
-}
-
-/**
- * Resets the fly to the left with a random y
- */
-function resetFly() {
-    fly.x = 0;
-    fly.y = random(0, 300);
-}
-
-/**
- * Moves the frog to the mouse position on x
- */
-function moveFrog() {
-    frog.body.x = mouseX;
-}
-
-/**
- * Handles moving the tongue based on its state
- */
-function moveTongue() {
+/* Moves tongue */
+function moveTongue() { // Handles moving the tongue based on its state
     // Tongue matches the frog's x
     frog.tongue.x = frog.body.x;
     // If the tongue is idle, it doesn't do anything
@@ -248,25 +270,37 @@ function moveTongue() {
 
 
 
-/**
- * Displays the tongue (tip and line connection) and the frog (body)
- */
-function drawFrog() {
-    // Draw the tongue tip
+
+
+/* GRAPHICS */ 
+
+/* Draws the fly as a black circle */
+function drawFly() {
+    push();
+    noStroke();
+    fill("#000000");
+    ellipse(fly.x, fly.y, fly.size);
+    pop();
+}
+
+/* Draw frog */
+function drawFrog() { // Displays the tongue (tip and line connection) and the frog (body)
+    
+    // Tongue tip 
     push();
     fill("#ff0000");
     noStroke();
     ellipse(frog.tongue.x, frog.tongue.y, frog.tongue.size);
     pop();
 
-    // Draw the rest of the tongue
+    // Tongue body 
     push();
     stroke("#ff0000");
     strokeWeight(frog.tongue.size);
     line(frog.tongue.x, frog.tongue.y, frog.body.x, frog.body.y);
     pop();
 
-    // Draw the frog's body
+    // Frog's body
     push();
     fill("#00ff00");
     noStroke();
@@ -274,39 +308,10 @@ function drawFrog() {
     pop();
 }
 
+
 /* Sky Graphics */ 
 function drawSky() {
     background(255, 200, 200);
     backgroundImg.resize(0, width+10); 
     image(backgroundImg, 0, 0); 
-}
-
-
-/**
- * Handles the tongue overlapping the fly
- */
-function checkTongueFlyOverlap() {
-    // Get distance from tongue to fly
-    const d = dist(frog.tongue.x, frog.tongue.y, fly.x, fly.y);
-    // Check if it's an overlap
-    const eaten = (d < frog.tongue.size/2 + fly.size/2);
-    if (eaten) {
-        // Reset the fly
-        resetFly();
-        // Bring back the tongue
-        frog.tongue.state = "inbound";
-
-        // Keep score
-        score++; 
-        console.log("score: " + score);
-    }
-}
-
-/**
- * Launch the tongue on click (if it's not launched yet)
- */
-function mousePressed() {
-    if (frog.tongue.state === "idle") {
-        frog.tongue.state = "outbound";
-    }
 }
