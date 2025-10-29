@@ -272,6 +272,8 @@ function moveTongue() { // Handles moving the tongue based on its state
 
 
 
+
+
 /* GRAPHICS */ 
 
 /* Draws the fly as a black circle */
@@ -288,14 +290,14 @@ function drawFlyTrap() { // Displays the tongue (tip and line connection) and th
     
     // Tongue tip 
     push();
-    fill("#ff0000");
+    fill("#044A34");
     noStroke();
-    ellipse(flyTrap.tongue.x, flyTrap.tongue.y, flyTrap.tongue.size);
+    ellipse(flyTrap.tongue.x, flyTrap.tongue.y, map(flyTrap.tongue.y, 0, height, 30, 0));
     pop();
 
     // Tongue body 
     push();
-    stroke("#ff0000");
+    stroke("#044A34");
     strokeWeight(flyTrap.tongue.size);
     line(flyTrap.tongue.x, flyTrap.tongue.y, flyTrap.body.x, flyTrap.body.y);
     pop();
