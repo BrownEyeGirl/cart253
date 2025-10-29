@@ -15,10 +15,8 @@
 
 "use strict";
 
-// Canvas
 
-
-// Game Funct
+// Game Functions 
 let gameState = "start";
 let score = 0; 
 let timer = {
@@ -46,6 +44,7 @@ const frog = {
     }
 };
 
+
 // Fly
 const fly = { // Has a position, size, and speed of horizontal movement
     x: 0,
@@ -54,26 +53,29 @@ const fly = { // Has a position, size, and speed of horizontal movement
     speed: 3
 };
 
-/** Creates the canvas and initializes the fly */
-function setup() {
-    createCanvas(640, 480);
 
+function setup() {
+    // Canvas 
+    createCanvas(640, 480);
     background(0);
+
+    // Waits .5 seconds to start the game. 
     setTimeout(startTheGame(),5000); // runs startTheGame() after 5000 miliseconds, 
 
-    // Give the fly its first random position
+    // Fly (moves to start pos)
     resetFly();
 }
-function startTheGame() {
-    gameState = "play";
-}
+
+
+
 
 function draw() {
 
-    // timing
-    console.log(millis()) // game starts at 5k millis, in the gamestate the start time was 5k
+    // Timing log 
+    console.log(millis())
 
-    /* Activating Gamestates */
+
+    // Activating Gamestates 
     if(gameState==="start") {
         startScreen();
     }
@@ -89,12 +91,17 @@ function draw() {
 }
 
 
-
 /* GAME FUNCTIONS */ 
+function startTheGame() {
+    gameState = "play";
+}
+
+/* "Loading" screen */ 
 function startScreen() {
     background(0); 
 }
 
+/* Playing screen */
 function gameScreen() {
     console.log("in game screen"); 
     background(0, 100, 200);
@@ -149,9 +156,7 @@ function moveFly() {
     }
 }
 
-/**
- * Draws the fly as a black circle
- */
+/* Draws the fly as a black circle */
 function drawFly() {
     push();
     noStroke();
@@ -160,24 +165,18 @@ function drawFly() {
     pop();
 }
 
-/**
- * Resets the fly to the left with a random y
- */
+/* Resets the fly to the left with a random y */
 function resetFly() {
     fly.x = 0;
     fly.y = random(0, 300);
 }
 
-/**
- * Moves the frog to the mouse position on x
- */
+/* Moves the frog to the mouse position on x */
 function moveFrog() {
     frog.body.x = mouseX;
 }
 
-/**
- * Handles moving the tongue based on its state
- */
+/* Handles moving the tongue based on its state */
 function moveTongue() {
     // Tongue matches the frog's x
     frog.tongue.x = frog.body.x;
@@ -205,9 +204,7 @@ function moveTongue() {
 
 
 
-/**
- * Displays the tongue (tip and line connection) and the frog (body)
- */
+/* Displays the tongue (tip and line connection) and the frog (body) */
 function drawFrog() {
     // Draw the tongue tip
     push();
@@ -231,9 +228,7 @@ function drawFrog() {
     pop();
 }
 
-/**
- * Handles the tongue overlapping the fly
- */
+/* Handles the tongue overlapping the fly */
 function checkTongueFlyOverlap() {
     // Get distance from tongue to fly
     const d = dist(frog.tongue.x, frog.tongue.y, fly.x, fly.y);
@@ -251,9 +246,7 @@ function checkTongueFlyOverlap() {
     }
 }
 
-/**
- * Launch the tongue on click (if it's not launched yet)
- */
+/* Launch the tongue on click (if it's not launched yet)*/
 function mousePressed() {
     if (frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
