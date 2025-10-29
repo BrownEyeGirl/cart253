@@ -1,6 +1,6 @@
 /**
- * Frogfrogfrog (Debugging) 
- * Pippin Barr
+ * Debugging
+ * Skyla Trousdale and Pippin Barr
  * 
  * A game of catching flies with your frog-tongue
  * 
@@ -16,7 +16,7 @@
 "use strict";
 
 // Canvas
-
+let backgroundImg; 
 
 // Game Funct
 let gameState = "start";
@@ -57,15 +57,19 @@ const fly = { // Has a position, size, and speed of horizontal movement
     speed: 3
 };
 
-/** Creates the canvas and initializes the fly */
+
 function setup() {
+
+    // Canvas
     createCanvas(800, 500);
     background(0);
+    backgroundImg = loadImage('assets/images/pinkclouds.jpg') // https://i.pinimg.com/736x/a0/d3/70/a0d3704c3f420be1115c2310d24b6a3a.jpg
 
+    // Play Button 
     button = createButton('play again?');
     setTimeout(startTheGame(),5000); // runs startTheGame() after 5000 miliseconds, 
 
-    // Give the fly its first random position
+    // Reset Game 
     resetFly();
 }
 function startTheGame() {
@@ -110,7 +114,11 @@ function startScreen() {
 
 function gameScreen() {
     console.log("in game screen"); 
-    background(0, 100, 200);
+
+    // Sky graphics 
+    drawSky(); 
+
+
     displayTimer();
     displayScore();
     if(topScore > 0) {
@@ -265,6 +273,14 @@ function drawFrog() {
     ellipse(frog.body.x, frog.body.y, frog.body.size);
     pop();
 }
+
+/* Sky Graphics */ 
+function drawSky() {
+    background(255, 200, 200);
+    backgroundImg.resize(0, width+10); 
+    image(backgroundImg, 0, 0); 
+}
+
 
 /**
  * Handles the tongue overlapping the fly
