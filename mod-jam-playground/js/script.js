@@ -19,6 +19,10 @@
 let backgroundImg; 
 let flyTraps; 
 
+let flyTrapLeft;
+let flyTrapRight;  
+let flyTrapImg; 
+
 // Game Funct
 let button;
 let gameState = "start";
@@ -45,6 +49,7 @@ const flyTrap = {
         y: 480,
         size: 20,
         speed: 20,
+        adjustment: 50, 
         state: "idle" // State can be: idle, outbound, inbound (determines how the tongue moves each frame)
     }
 };
@@ -64,7 +69,12 @@ function setup() {
     createCanvas(800, 500);
     background(0);
     backgroundImg = loadImage('assets/images/pinkclouds.jpg') // https://i.pinimg.com/736x/a0/d3/70/a0d3704c3f420be1115c2310d24b6a3a.jpg
+    
+    // Characters 
     flyTraps  = loadImage('assets/images/flytraps.png'); 
+    flyTrapLeft = loadImage('assets/images/flytrapleft.png');
+    flyTrapRight = loadImage('assets/images/flytrapright.png') 
+    flyTrapImg = flyTrapLeft; 
 
     // Play Button 
     button = createButton('play again?');
@@ -96,6 +106,8 @@ function draw() {
 
 
 
+
+
 /* SCREENS */  
 
 /* Loading screen */ 
@@ -118,6 +130,7 @@ function gameScreen() {
    // background("#87ceeb");
     moveFly();
     drawFly();
+
     moveFlyTrap();
     moveTongue();
     drawFlyTrap();
@@ -187,32 +200,30 @@ function displayTimer() {
 }
 
 
-/* Resets the fly to the left with a random y */
-function resetFly() {
+/* Reset Fly */
+function resetFly() { // Resets the fly to the left with a random y
     fly.x = 0;
     fly.y = random(20, height/3);
 }
 
-/* Handles the tongue overlapping the fly */
+/* Fly Catch */
 function checkTongueFlyOverlap() {
-    // Get distance from tongue to fly
-    const d = dist(flyTrap.tongue.x, flyTrap.tongue.y, fly.x, fly.y);
-    // Check if it's an overlap
-    const eaten = (d < flyTrap.tongue.size/2 + fly.size/2);
-    if (eaten) {
-        // Reset the fly
-        resetFly();
-        // Bring back the tongue
-        flyTrap.tongue.state = "inbound";
 
-        // Keep score
+    // Fly Caught 
+    const d = dist(flyTrap.tongue.x, flyTrap.tongue.y, fly.x, fly.y); //     // Get distance from tongue to fly
+    const eaten = (d < flyTrap.tongue.size/2 + fly.size/2);  // Check if it's an overlap
+    if (eaten) {
+        resetFly();  // Reset the fly
+        flyTrap.tongue.state = "inbound";  // Bring back the tongue
+
+        // Score 
         score++; 
         console.log("score: " + score);
     }
 }
 
-/* Launch the tongue on click (if it's not launched yet) */
-function mousePressed() {
+/* Activate Tongue */
+function mousePressed() { // Launch the tongue on click (if it's not launched yet)
     if (flyTrap.tongue.state === "idle") {
         flyTrap.tongue.state = "outbound";
     }
@@ -229,42 +240,51 @@ function mousePressed() {
 
 /* ANIMATION */ 
 
+
 /* Moves flyTrap */
 function moveFlyTrap() { // Moves the flyTrap to the mouse position on x 
-    flyTrap.body.x = mouseX;
+    
+    // Check positioin 
+    if(mouseX < width/2) {
+        flyTrapImg = flyTrapLeft; 
+        flyTrap.body.x = mouseX;
+        flyTrap.tongue.adjustment = -15;
+    }
+    else {
+        flyTrapImg = flyTrapRight; 
+         flyTrap.body.x = mouseX;
+         flyTrap.tongue.adjustment = 15;
+    }
+    
 }
 
 /* Moves fly */
 function moveFly() { // Moves the fly according to its speed, Resets the fly if it gets all the way to the right
-    // Move the fly
-    fly.x += fly.speed;
-    // Handle the fly going off the canvas
-    if (fly.x > width) {
+    fly.x += fly.speed;     // Move the fly
+    if (fly.x > width) {     // Handle the fly going off the canvas
         resetFly();
     }
 }
 
 /* Moves tongue */
 function moveTongue() { // Handles moving the tongue based on its state
-    // Tongue matches the flyTrap's x
-    flyTrap.tongue.x = flyTrap.body.x;
-    // If the tongue is idle, it doesn't do anything
-    if (flyTrap.tongue.state === "idle") {
+    
+    flyTrap.tongue.x = flyTrap.body.x; // Tongue matches the flyTrap's x
+    if (flyTrap.tongue.state === "idle") {  // If the tongue is idle, it doesn't do anything
         // Do nothing
+        
     }
-    // If the tongue is outbound, it moves up
-    else if (flyTrap.tongue.state === "outbound") {
+    
+    else if (flyTrap.tongue.state === "outbound") { // If the tongue is outbound, it moves up
         flyTrap.tongue.y += -flyTrap.tongue.speed;
-        // The tongue bounces back if it hits the top
-        if (flyTrap.tongue.y <= 0) {
+        if (flyTrap.tongue.y <= 10) { // The tongue bounces back if it hits the top
             flyTrap.tongue.state = "inbound";
         }
     }
-    // If the tongue is inbound, it moves down
-    else if (flyTrap.tongue.state === "inbound") {
+   
+    else if (flyTrap.tongue.state === "inbound") {  // If the tongue is inbound, it moves down
         flyTrap.tongue.y += flyTrap.tongue.speed;
-        // The tongue stops if it hits the bottom
-        if (flyTrap.tongue.y >= height) {
+        if (flyTrap.tongue.y >= height-150) {   // The tongue stops if it hits the bottom
             flyTrap.tongue.state = "idle";
         }
     }
@@ -294,21 +314,23 @@ function drawFlyTrap() { // Displays the tongue (tip and line connection) and th
     push();
     fill("#044A34");
     noStroke();
-    ellipse(flyTrap.tongue.x, flyTrap.tongue.y, map(flyTrap.tongue.y, 0, height, 30, 0));
+    ellipse(flyTrap.tongue.x-+flyTrap.tongue.adjustment, flyTrap.tongue.y, map(flyTrap.tongue.y, 0, height, 30, 0));
     pop();
 
     // Tongue body 
     push();
     stroke("#044A34");
     strokeWeight(flyTrap.tongue.size);
-    line(flyTrap.tongue.x, flyTrap.tongue.y, flyTrap.body.x, flyTrap.body.y);
+    line(flyTrap.tongue.x-flyTrap.tongue.adjustment, flyTrap.tongue.y, flyTrap.body.x, 370); // changed to 350 so it rests in mouth
     pop();
 
     // Fly Trap's body
+    flyTrapImg.resize(0, 200); 
+    image(flyTrapImg, flyTrap.body.x-50, flyTrap.body.y-200); 
     push();
     fill("#00ff00");
     noStroke();
-    ellipse(flyTrap.body.x, flyTrap.body.y, flyTrap.body.size);
+    //ellipse(flyTrap.body.x, flyTrap.body.y, flyTrap.body.size);
     pop();
 }
 
@@ -324,6 +346,7 @@ function drawSky() {
     backgroundImg.resize(width, 0); 
     image(backgroundImg, 0, 0); 
 
-    flyTraps.resize(width, 0); 
-    image(flyTraps, 0, -100);
+    // Background Flytraps 
+    flyTraps.resize(width-100, 0); 
+    image(flyTraps, 50, 0);
 }
