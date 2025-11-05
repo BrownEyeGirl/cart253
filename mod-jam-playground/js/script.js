@@ -1,5 +1,5 @@
 /**
- * Debugging
+ * <Debugging>
  * Skyla Trousdale and Pippin Barr
  * 
  * A game of catching flies with your flyTrap-tongue
@@ -20,7 +20,13 @@ let backgroundImg;
 let backgroundImgPos; 
 let backgroundImgFlipped; 
 let flyTraps; 
+ 
 
+
+// Text
+let fontVT323; 
+
+// Flytrap 
 let flyTrapLeft;
 let flyTrapRight;  
 let flyTrapImg; 
@@ -65,6 +71,15 @@ const fly = { // Has a position, size, and speed of horizontal movement
 };
 
 
+// DeBugging 
+let bug = [false, false, false, false, false, false, false, false, false, false, false]; 
+let flyTrapsBug;
+let flyTrapRightBug; 
+let flyTrapLeftBug;
+
+
+
+
 function setup() {
 
     // Canvas
@@ -74,11 +89,22 @@ function setup() {
     backgroundImgFlipped = loadImage('assets/images/greycloudsflipped.jpg') // https://i.pinimg.com/736x/e4/a4/44/e4a444b5510ddc1e5a5215c5db0a2563.jpg
     backgroundImgPos = 0; 
 
+    // Text
+    fontVT323 = loadFont('assets/fonts/VT323-Regular.ttf')
+
+
     // Characters 
     flyTraps  = loadImage('assets/images/flytraps.png'); 
+   
     flyTrapLeft = loadImage('assets/images/flytrapleft.png');
     flyTrapRight = loadImage('assets/images/flytrapright.png') 
     flyTrapImg = flyTrapLeft; 
+
+    // Debugging 
+    flyTrapsBug  = loadImage('assets/images/flytrapsbug.png'); 
+    flyTrapsBug.filter(THRESHOLD); // broken  
+    flyTrapLeftBug = loadImage('assets/images/flytrapleftbug.png');
+    flyTrapRightBug = loadImage('assets/images/flytraprightbug.png'); 
 
     // Play Button 
     button = createButton('play again?');
@@ -90,10 +116,9 @@ function setup() {
 
 function draw() {
 
-    // timing
-    //console.log(millis()) // game starts at 5k millis, in the gamestate the start time was 5k
-
     /* Activating Gamestates */
+    deBug();
+
     if(gameState==="start") {
         startScreen();
     }
@@ -116,6 +141,7 @@ function draw() {
 
 /* Loading screen */ 
 function startScreen() {
+    console.log("in start screen");
     background(0, 200,200); 
     delayTime(500000000);
 }
@@ -166,6 +192,7 @@ function endScreen() {
 
 /* Starts the game */ 
 function startTheGame() {
+    reBug(); 
     gameState = "play";
     button.hide();
     timer.timePassed = 0; 
@@ -179,28 +206,49 @@ function startTheGame() {
 
 /* Displays Score */
 function displayScore() {
-    push(); 
-    //fill(255);
-    textSize(20);
-    text('Score: ' + score, width-100, 60);
-    pop(); 
+    //update bugs!
+    if(bug.length > score) {
+        bug[score] = true;
+    }
+
+    if(bug[2]) { // Bug 2
+        push(); 
+        if(bug[2]) {
+            fill(255);
+        }
+        if(bug[3]){
+            fill(0); 
+        }
+        textFont(fontVT323);
+        textSize(40);
+        text('Score: ' + score, width-200, 60);
+        pop();
+    }
 }
 
 /* Displays Top Score (called after score > 0) */
 function displayTopScore() {
     push();
-    fill(255, 255, 0); 
-    textSize(20); 
-    text('Top Score: ' + topScore, 50, 30);
+    fill(255, 25, 0); 
+    textFont(fontVT323);
+    textSize(40); 
+    text('Top Score: ' + topScore, width-200, 90);
     pop(); 
 }
 
 /* Displays Timer */
 function displayTimer() {
-    push(); 
-    textSize(20); 
-    text('Time: ' + (10-floor(timer.timePassed/1000)), width-100, 30);
-    pop(); 
+    if(bug[1]) { // Bug 1
+        push(); 
+        fill(255); 
+        if(bug[3]) {
+            fill(0);
+        }
+        textFont(fontVT323);
+        textSize(40); 
+        text('Time: ' + (10-floor(timer.timePassed/1000)), width-760, 60);
+        pop(); 
+    }
 }
 
 
@@ -250,12 +298,12 @@ function moveFlyTrap() { // Moves the flyTrap to the mouse position on x
     
     // Check positioin 
     if(mouseX < width/2) {
-        flyTrapImg = flyTrapLeft; 
+        flyTrapImg = flyTrapLeftBug; 
         flyTrap.body.x = mouseX;
         flyTrap.tongue.adjustment = -15;
     }
     else {
-        flyTrapImg = flyTrapRight; 
+        flyTrapImg = flyTrapRightBug; 
          flyTrap.body.x = mouseX;
          flyTrap.tongue.adjustment = 15;
     }
@@ -306,7 +354,7 @@ function moveTongue() { // Handles moving the tongue based on its state
 function drawFly() {
     push();
     noStroke();
-    fill("#000000");
+    fill(0, 255, 0);
     ellipse(fly.x, fly.y, fly.size);
     pop();
 }
@@ -346,23 +394,71 @@ function gulp() {
 
 /* Sky Graphics */ 
 function drawSky() {
-    background(255, 200, 200);
+    background(0);
 
-    backgroundImgPos = -(millis() / 100) % (2*width);
     
+    backgroundImgPos = 0; 
+    if(bug[6]) { // Bug 6
+        backgroundImgPos = -(millis() / 100) % (2*width);
+    }
+
+
     //frontwards sky 
     backgroundImg.resize(width, 0); 
     image(backgroundImg, backgroundImgPos, 0); 
     image(backgroundImg, backgroundImgPos+2*backgroundImg.width, 0); 
+
 
     //backwards sky 
     backgroundImgFlipped.resize(width, 0); 
     image(backgroundImgFlipped, backgroundImgPos+backgroundImg.width, 0); 
 
 
+    if(!bug[5]) { // Bug 5
+        background(255); 
+    }
+
    
 
     // Background Flytraps 
-    flyTraps.resize(width-100, 0); 
-    image(flyTraps, 50, 0);
+    //flyTraps.filter(THRESHOLD);
+    flyTrapsBug.resize(width-100, 0); 
+    image(flyTrapsBug, 50, 0);
+
+    if(!bug[4]) { // Bug 4
+        background(255); 
+    }
+
+    // Bug 3
+    if(!bug[3]) {
+        background(0); 
+    }
 }
+
+
+/* DE BUGGING  */
+
+function deBug() {
+    if(!bug[7]) { // Bug 7
+        flyTrapLeftBug.filter(THRESHOLD);
+        flyTrapRightBug.filter(THRESHOLD);
+    }
+    else {
+        flyTrapLeftBug = flyTrapLeft;
+        flyTrapRightBug = flyTrapRight; 
+    }
+
+    if(!bug[8]) { // Bug 8
+      flyTrapsBug.filter(THRESHOLD)
+    }
+    else {
+        flyTrapsBug = flyTraps;
+    }
+    
+}
+
+function reBug() {
+    bug = [false, false, false, false, false, false, false, false, false, false, false];
+}
+
+
