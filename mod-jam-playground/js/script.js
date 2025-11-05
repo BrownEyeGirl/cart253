@@ -190,7 +190,7 @@ function displayTimer() {
 /* Resets the fly to the left with a random y */
 function resetFly() {
     fly.x = 0;
-    fly.y = random(0, 300);
+    fly.y = random(20, height/3);
 }
 
 /* Handles the tongue overlapping the fly */
