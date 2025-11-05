@@ -70,8 +70,8 @@ function setup() {
     // Canvas
     createCanvas(800, 500);
     background(0);
-    backgroundImg = loadImage('assets/images/pinkclouds.jpg') // https://i.pinimg.com/736x/a0/d3/70/a0d3704c3f420be1115c2310d24b6a3a.jpg
-    backgroundImgFlipped = loadImage('assets/images/pinkcloudsflipped.jpg')
+    backgroundImg = loadImage('assets/images/greyclouds.jpg') // https://i.pinimg.com/736x/a0/d3/70/a0d3704c3f420be1115c2310d24b6a3a.jpg
+    backgroundImgFlipped = loadImage('assets/images/greycloudsflipped.jpg') // https://i.pinimg.com/736x/e4/a4/44/e4a444b5510ddc1e5a5215c5db0a2563.jpg
     backgroundImgPos = 0; 
 
     // Characters 
