@@ -38,6 +38,7 @@ let score = 0;
 let topScore = 0; 
 let timer = {
     startTime: 2000,
+    totalTime: 28,
     timePassed: 0,
     timeInterval: 10000
 }
@@ -168,7 +169,7 @@ function gameScreen() {
 
     timer.timePassed = millis() - timer.startTime;
 
-    if(10-floor(timer.timePassed/1000) <= 0) {
+    if(timer.totalTime-floor(timer.timePassed/1000) <= 0) {
         gameState = "end"; 
     }
 }
@@ -246,7 +247,7 @@ function displayTimer() {
         }
         textFont(fontVT323);
         textSize(40); 
-        text('Time: ' + (10-floor(timer.timePassed/1000)), width-760, 60);
+        text('Time: ' + (timer.totalTime-floor(timer.timePassed/1000)), width-760, 60);
         pop(); 
     }
 }
