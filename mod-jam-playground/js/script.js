@@ -17,6 +17,7 @@
 
 // Canvas
 let backgroundImg; 
+let flyTraps; 
 
 // Game Funct
 let button;
@@ -63,6 +64,7 @@ function setup() {
     createCanvas(800, 500);
     background(0);
     backgroundImg = loadImage('assets/images/pinkclouds.jpg') // https://i.pinimg.com/736x/a0/d3/70/a0d3704c3f420be1115c2310d24b6a3a.jpg
+    flyTraps  = loadImage('assets/images/flytraps.png'); 
 
     // Play Button 
     button = createButton('play again?');
@@ -319,6 +321,9 @@ function gulp() {
 /* Sky Graphics */ 
 function drawSky() {
     background(255, 200, 200);
-    backgroundImg.resize(0, width+10); 
+    backgroundImg.resize(width, 0); 
     image(backgroundImg, 0, 0); 
+
+    flyTraps.resize(width, 0); 
+    image(flyTraps, 0, -100);
 }
