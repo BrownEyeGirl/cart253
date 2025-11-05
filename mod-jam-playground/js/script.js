@@ -22,7 +22,6 @@ let backgroundImgFlipped;
 let flyTraps; 
  
 
-
 // Text
 let fontVT323; 
 
@@ -38,7 +37,7 @@ let score = 0;
 let topScore = 0; 
 let timer = {
     startTime: 2000,
-    totalTime: 28,
+    totalTime: 20,
     timePassed: 0,
     timeInterval: 10000
 }
@@ -77,9 +76,11 @@ let bug = [false, false, false, false, false, false, false, false, false, false,
 let flyTrapsBug;
 let flyTrapRightBug; 
 let flyTrapLeftBug;
+let glitchGif; 
 
-
-
+function preload() {
+    glitchGif = createImg('assets/images/glitch.gif');
+}
 
 function setup() {
 
@@ -106,10 +107,12 @@ function setup() {
     flyTrapsBug.filter(THRESHOLD); // broken  
     flyTrapLeftBug = loadImage('assets/images/flytrapleftbug.png');
     flyTrapRightBug = loadImage('assets/images/flytraprightbug.png'); 
+    //glitchGif = createImg('assets/images/glitch.gif'); 
+    //glitchGif.position(width, 0);
 
     // Play Button 
     button = createButton('play again?');
-    setTimeout(startTheGame(),5000); // runs startTheGame() after 5000 miliseconds, 
+    setTimeout(startTheGame(),50000); // runs startTheGame() after 5000 miliseconds, 
 
     // Reset Game 
     resetFly();
@@ -125,6 +128,7 @@ function draw() {
     }
 
     else if(gameState==="play") {
+        glitchGif.hide(); 
         gameScreen(); 
     }
 
@@ -136,7 +140,9 @@ function draw() {
 
 
 
-
+function doubleClicked() {
+    glitchGif.hide(); 
+}
 
 /* SCREENS */  
 
@@ -144,7 +150,7 @@ function draw() {
 function startScreen() {
     console.log("in start screen");
     background(0, 200,200); 
-    delayTime(500000000);
+    delayTime(500000);
 }
 
 /* Playing screen */ 
@@ -170,6 +176,7 @@ function gameScreen() {
     timer.timePassed = millis() - timer.startTime;
 
     if(timer.totalTime-floor(timer.timePassed/1000) <= 0) {
+    //if(score > bug.length) {
         gameState = "end"; 
     }
 }
@@ -177,6 +184,10 @@ function gameScreen() {
 /* Gameover screen */ 
 function endScreen() {
     background(0, 0, 0);
+
+    // glitchGif = createImg('assets/images/glitch.gif'); 
+   // glitchGif.position(windowWidth/2-glitchGif.width/2, windowHeight/2-glitchGif.height/2);
+
     button.show();
     button.position(width/2, height/2);
     button.mousePressed(startTheGame);
@@ -272,6 +283,12 @@ function checkTongueFlyOverlap() {
         // Score 
         score++; 
         console.log("score: " + score);
+
+        /*// Glitch 
+        for(int i )
+        glitchGif.position(0, 0); 
+
+    }*/
     }
 }
 
@@ -459,6 +476,9 @@ function deBug() {
 }
 
 function reBug() {
+    flyTrapLeft = loadImage('assets/images/flytrapleft.png'); 
+    flyTrapRight = loadImage('assets/images/flytrapright.png'); 
+    flyTraps = loadImage('assets/images/flytraps.png')
     bug = [false, false, false, false, false, false, false, false, false, false, false];
 }
 
