@@ -17,6 +17,8 @@
 
 // Canvas
 let backgroundImg; 
+let backgroundImgPos; 
+let backgroundImgFlipped; 
 let flyTraps; 
 
 let flyTrapLeft;
@@ -69,7 +71,9 @@ function setup() {
     createCanvas(800, 500);
     background(0);
     backgroundImg = loadImage('assets/images/pinkclouds.jpg') // https://i.pinimg.com/736x/a0/d3/70/a0d3704c3f420be1115c2310d24b6a3a.jpg
-    
+    backgroundImgFlipped = loadImage('assets/images/pinkcloudsflipped.jpg')
+    backgroundImgPos = 0; 
+
     // Characters 
     flyTraps  = loadImage('assets/images/flytraps.png'); 
     flyTrapLeft = loadImage('assets/images/flytrapleft.png');
@@ -343,8 +347,20 @@ function gulp() {
 /* Sky Graphics */ 
 function drawSky() {
     background(255, 200, 200);
+
+    backgroundImgPos = -(millis() / 100) % (2*width);
+    
+    //frontwards sky 
     backgroundImg.resize(width, 0); 
-    image(backgroundImg, 0, 0); 
+    image(backgroundImg, backgroundImgPos, 0); 
+    image(backgroundImg, backgroundImgPos+2*backgroundImg.width, 0); 
+
+    //backwards sky 
+    backgroundImgFlipped.resize(width, 0); 
+    image(backgroundImgFlipped, backgroundImgPos+backgroundImg.width, 0); 
+
+
+   
 
     // Background Flytraps 
     flyTraps.resize(width-100, 0); 
