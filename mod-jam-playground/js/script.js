@@ -19,6 +19,8 @@
 let backgroundImg; 
 let backgroundImgPos; 
 let backgroundImgFlipped; 
+let backgroundImgPink; 
+let backgroundImgPinkFlipped; 
 let flyTraps; 
  
 
@@ -34,12 +36,12 @@ let flyTrapImg;
 let button;
 let gameState = "start";
 let score = 0; 
-let topScore = 0; 
 let timer = {
     startTime: 2000,
     totalTime: 20,
     timePassed: 0,
-    timeInterval: 10000
+    timeInterval: 0,
+    topTime: 0
 }
 
 
@@ -72,7 +74,7 @@ const fly = { // Has a position, size, and speed of horizontal movement
 let flyImg; 
 
 // DeBugging 
-let bug = [false, false, false, false, false, false, false, false, false, false, false]; 
+let bug = [false, false, false, false, false, false, false, false, false]; 
 let flyTrapsBug;
 let flyTrapRightBug; 
 let flyTrapLeftBug;
@@ -90,6 +92,8 @@ function setup() {
     backgroundImg = loadImage('assets/images/greyclouds.jpg') // https://i.pinimg.com/736x/a0/d3/70/a0d3704c3f420be1115c2310d24b6a3a.jpg
     backgroundImgFlipped = loadImage('assets/images/greycloudsflipped.jpg') // https://i.pinimg.com/736x/e4/a4/44/e4a444b5510ddc1e5a5215c5db0a2563.jpg
     backgroundImgPos = 0; 
+    backgroundImgPink = loadImage('assets/images/pinkclouds.jpg');
+    backgroundImgPinkFlipped = loadImage('assets/images/pinkcloudsflipped.jpg');
 
     // Text
     fontVT323 = loadFont('assets/fonts/VT323-Regular.ttf')
@@ -161,9 +165,10 @@ function gameScreen() {
     drawSky(); 
     displayTimer();
     displayScore();
-    if(topScore > 0) {
-        displayTopScore(); 
-    }  
+    if(bug[3]) {
+    displayTopTime(); 
+    }
+  
     // from 'draw'
    // background("#87ceeb");
     moveFly();
@@ -176,8 +181,8 @@ function gameScreen() {
 
     timer.timePassed = millis() - timer.startTime;
 
-    if(timer.totalTime-floor(timer.timePassed/1000) <= 0) {
-    //if(score > bug.length) {
+   // if(timer.totalTime-floor(timer.timePassed/1000) <= 0) {
+    if(score > bug.length) {
         gameState = "end"; 
     }
 }
@@ -209,10 +214,11 @@ function startTheGame() {
     gameState = "play";
     button.hide();
     timer.timePassed = 0; 
-    timer.timeInterval = 10000 + millis();
-    timer.startTime = 2000 + millis();
-    if(score > topScore) {
-        topScore = score; 
+    timer.startTime = millis();
+    //timer.timeInterval = millis() - timer.startTime;
+    console.log(timer.timeInterval); 
+    if(timer.timeInterval >= timer.topTime) {
+        timer.topTime = timer.timeInterval; 
     }
     score = 0; 
 }
@@ -234,18 +240,18 @@ function displayScore() {
         }
         textFont(fontVT323);
         textSize(40);
-        text('Score: ' + score, width-200, 60);
+        text('Bugs: ' + score + ' / 12', width-200, 60);
         pop();
     }
 }
 
 /* Displays Top Score (called after score > 0) */
-function displayTopScore() {
+function displayTopTime() {
     push();
     fill(255, 25, 0); 
     textFont(fontVT323);
     textSize(40); 
-    text('Top Score: ' + topScore, width-200, 90);
+    text('Top Time: ' + timer.topTime, width-200, 90);
     pop(); 
 }
 
@@ -259,7 +265,8 @@ function displayTimer() {
         }
         textFont(fontVT323);
         textSize(40); 
-        text('Time: ' + (timer.totalTime-floor(timer.timePassed/1000)), width-760, 60);
+        timer.timeInterval = floor(timer.timePassed/1000);
+        text('Time: ' + timer.timeInterval, width-760, 60);
         pop(); 
     }
 }
@@ -427,7 +434,7 @@ function drawSky() {
         backgroundImgPos = -(millis() / 100) % (2*width);
     }
 
-
+    
     //frontwards sky 
     backgroundImg.resize(width, 0); 
     image(backgroundImg, backgroundImgPos, 0); 
@@ -437,7 +444,6 @@ function drawSky() {
     //backwards sky 
     backgroundImgFlipped.resize(width, 0); 
     image(backgroundImgFlipped, backgroundImgPos+backgroundImg.width, 0); 
-
 
     if(!bug[5]) { // Bug 5
         background(255); 
@@ -479,6 +485,12 @@ function deBug() {
     else {
         flyTrapsBug = flyTraps;
     }
+
+    if(bug[10]) { // Bug 10
+        backgroundImg = backgroundImgPink;
+        backgroundImgFlipped = backgroundImgPinkFlipped;
+    }
+
     
 }
 
