@@ -182,7 +182,7 @@ function gameScreen() {
     timer.timePassed = millis() - timer.startTime;
 
    // if(timer.totalTime-floor(timer.timePassed/1000) <= 0) {
-    if(score > bug.length) {
+    if(score >= 10) {
         gameState = "end"; 
     }
 }
@@ -190,12 +190,24 @@ function gameScreen() {
 /* Gameover screen */ 
 function endScreen() {
     background(0, 0, 0);
+    
+    // checks top score
+    if(timer.timeInterval >= timer.topTime) {
+        timer.topTime = timer.timeInterval; 
+    }
+
+    push();
+    fill(255, 25, 0); 
+    textFont(fontVT323);
+    textSize(100); 
+    text('Top Time: ' + timer.topTime, 50, height/3);
+    pop();
 
     // glitchGif = createImg('assets/images/glitch.gif'); 
    // glitchGif.position(windowWidth/2-glitchGif.width/2, windowHeight/2-glitchGif.height/2);
 
     button.show();
-    button.position(width/2, height/2);
+    button.position(width/3, height-100);
     button.mousePressed(startTheGame);
 }
 
@@ -240,7 +252,7 @@ function displayScore() {
         }
         textFont(fontVT323);
         textSize(40);
-        text('Bugs: ' + score + ' / 12', width-200, 60);
+        text('Bugs: ' + score + ' / 10', width-200, 60);
         pop();
     }
 }

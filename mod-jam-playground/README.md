@@ -1,9 +1,7 @@
-# Frogfrogfrog
+# DEBUGGING
+By: Skyla Trousdale 
 
-A game about catching flies.
+A game where you actively debug the game as you play it. 
 
-[Play it!](https://pippinbarr.github.io/cart253-examples/topics/making/frogfrogfrog/index.html)
+[Play it!](https://browneyegirl.github.io/cart253/mod-jam-playground/)
 
-- [Ideas](./ideas.md)
-- [Planning](./planning.md)
-- [Pseudocode](./pseudocode.md)
