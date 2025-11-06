@@ -68,7 +68,7 @@ const flyTrap = {
 const fly = { // Has a position, size, and speed of horizontal movement
     x: 0,
     y: 200, // Will be random
-    size: 10,
+    size: 30,
     speed: 3
 };
 let flyImg; 
@@ -382,10 +382,10 @@ function drawFly() {
     noStroke();
     fill(0, 255, 0);
     if(!bug[9]) {
-        ellipse(fly.x, fly.y, fly.size);
+        ellipse(fly.x, fly.y, fly.size-20);
     }
     else {
-        flyImg.resize(60, 0); 
+        flyImg.resize(40, 0); 
         image(flyImg, fly.x, fly.y); 
     }
     pop();
