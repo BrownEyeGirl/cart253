@@ -69,7 +69,7 @@ const fly = { // Has a position, size, and speed of horizontal movement
     size: 10,
     speed: 3
 };
-
+let flyImg; 
 
 // DeBugging 
 let bug = [false, false, false, false, false, false, false, false, false, false, false]; 
@@ -101,6 +101,7 @@ function setup() {
     flyTrapLeft = loadImage('assets/images/flytrapleft.png');
     flyTrapRight = loadImage('assets/images/flytrapright.png') 
     flyTrapImg = flyTrapLeft; 
+    flyImg = loadImage('assets/images/bug1.png')
 
     // Debugging 
     flyTrapsBug  = loadImage('assets/images/flytrapsbug.png'); 
@@ -373,7 +374,13 @@ function drawFly() {
     push();
     noStroke();
     fill(0, 255, 0);
-    ellipse(fly.x, fly.y, fly.size);
+    if(!bug[9]) {
+        ellipse(fly.x, fly.y, fly.size);
+    }
+    else {
+        flyImg.resize(60, 0); 
+        image(flyImg, fly.x, fly.y); 
+    }
     pop();
 }
 
