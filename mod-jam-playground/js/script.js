@@ -74,7 +74,7 @@ const fly = { // Has a position, size, and speed of horizontal movement
 let flyImg; 
 
 // DeBugging 
-let bug = [false, false, false, false, false, false, false, false, false]; 
+let bug = [false, false, false, false, false, false, false, false, false, false]; 
 let flyTrapsBug;
 let flyTrapRightBug; 
 let flyTrapLeftBug;
@@ -182,7 +182,7 @@ function gameScreen() {
     timer.timePassed = millis() - timer.startTime;
 
    // if(timer.totalTime-floor(timer.timePassed/1000) <= 0) {
-    if(score >= 10) {
+    if(score >= 13) {
         gameState = "end"; 
     }
 }
@@ -252,7 +252,7 @@ function displayScore() {
         }
         textFont(fontVT323);
         textSize(40);
-        text('Bugs: ' + score + ' / 10', width-200, 60);
+        text('Bugs: ' + score + ' / 12', width-200, 60);
         pop();
     }
 }
