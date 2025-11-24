@@ -177,7 +177,7 @@ function gameScreen() {
 
     timer.timePassed = millis() - timer.startTime;
 
-    if(score >= 13) { // ends game if all bugs are caught 
+    if(score >= 11) { // ends game if all bugs are caught 
         gameState = "end"; 
     }
 }
@@ -245,7 +245,7 @@ function displayScore() {
         }
         textFont(fontVT323);
         textSize(40);
-        text('Bugs: ' + score + ' / 12', width-200, 60);
+        text('Bugs: ' + score + ' / 11', width-200, 60);
         pop();
     }
 }
