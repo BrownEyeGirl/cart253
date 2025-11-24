@@ -2,7 +2,7 @@
  * <Debugging>
  * Skyla Trousdale and Pippin Barr
  * 
- * A game of catching flies with your flyTrap-tongue
+ * A game of catching flies with your flyTrap-tongue. As you debug, the game debugs itself. 
  * 
  * Instructions:
  * - Move the flyTrap with your mouse
@@ -73,17 +73,20 @@ const fly = { // Has a position, size, and speed of horizontal movement
 };
 let flyImg; 
 
-// DeBugging 
+// DeBugging Feature 
 let bug = [false, false, false, false, false, false, false, false, false, false]; 
 let flyTrapsBug;
 let flyTrapRightBug; 
 let flyTrapLeftBug;
 let glitchGif; 
 
+
+/* Preloads Glitch, if screen doesn't load, glitch gif sometimes does. This is an occasional bug for some laptops */ 
 function preload() {
     glitchGif = createImg('assets/images/glitch.gif');
 }
 
+/* Set up initial buggy screen */
 function setup() {
 
     // Canvas
@@ -112,8 +115,6 @@ function setup() {
     flyTrapsBug.filter(THRESHOLD); // broken  
     flyTrapLeftBug = loadImage('assets/images/flytrapleftbug.png');
     flyTrapRightBug = loadImage('assets/images/flytraprightbug.png'); 
-    //glitchGif = createImg('assets/images/glitch.gif'); 
-    //glitchGif.position(width, 0);
 
     // Play Button 
     button = createButton('play again?');
@@ -123,12 +124,12 @@ function setup() {
     resetFly();
 }
 
+/* Activates gamestates */
 function draw() {
 
-    /* Activating Gamestates */
-    deBug();
+    deBug(); // if new bugs are caught, game debugs 
 
-    if(gameState==="start") {
+    if(gameState==="start") { // start screen 
         startScreen();
     }
 
@@ -144,11 +145,6 @@ function draw() {
 }
 
 
-
-function doubleClicked() {
-    glitchGif.hide(); 
-}
-
 /* SCREENS */  
 
 /* Loading screen */ 
@@ -160,20 +156,20 @@ function startScreen() {
 
 /* Playing screen */ 
 function gameScreen() {
-    console.log("in game screen"); 
 
+
+    // Starts playin screen 
     drawSky(); 
     displayTimer();
     displayScore();
-    if(bug[3]) {
+
+    if(bug[3]) { // bug 
     displayTopTime(); 
     }
   
-    // from 'draw'
-   // background("#87ceeb");
+    // Movement  
     moveFly();
     drawFly();
-
     moveFlyTrap();
     moveTongue();
     drawFlyTrap();
@@ -181,8 +177,7 @@ function gameScreen() {
 
     timer.timePassed = millis() - timer.startTime;
 
-   // if(timer.totalTime-floor(timer.timePassed/1000) <= 0) {
-    if(score >= 13) {
+    if(score >= 13) { // ends game if all bugs are caught 
         gameState = "end"; 
     }
 }
@@ -196,6 +191,7 @@ function endScreen() {
         timer.topTime = timer.timeInterval; 
     }
 
+    // displays top time to catch the bugs 
     push();
     fill(255, 25, 0); 
     textFont(fontVT323);
@@ -203,9 +199,7 @@ function endScreen() {
     text('Top Time: ' + timer.topTime, 50, height/3);
     pop();
 
-    // glitchGif = createImg('assets/images/glitch.gif'); 
-   // glitchGif.position(windowWidth/2-glitchGif.width/2, windowHeight/2-glitchGif.height/2);
-
+    // start game button 
     button.show();
     button.position(width/3, height-100);
     button.mousePressed(startTheGame);
@@ -222,12 +216,11 @@ function endScreen() {
 
 /* Starts the game */ 
 function startTheGame() {
-    reBug(); 
+    reBug();  // adds the bugs back in again 
     gameState = "play";
     button.hide();
     timer.timePassed = 0; 
     timer.startTime = millis();
-    //timer.timeInterval = millis() - timer.startTime;
     console.log(timer.timeInterval); 
     if(timer.timeInterval >= timer.topTime) {
         timer.topTime = timer.timeInterval; 
@@ -242,12 +235,12 @@ function displayScore() {
         bug[score] = true;
     }
 
-    if(bug[2]) { // Bug 2
+    if(bug[2]) { // bug 
         push(); 
         if(bug[2]) {
             fill(255);
         }
-        if(bug[3]){
+        if(bug[3]){ // bug 
             fill(0); 
         }
         textFont(fontVT323);
@@ -303,12 +296,6 @@ function checkTongueFlyOverlap() {
         // Score 
         score++; 
         console.log("score: " + score);
-
-        /*// Glitch 
-        for(int i )
-        glitchGif.position(0, 0); 
-
-    }*/
     }
 }
 
@@ -323,13 +310,7 @@ function mousePressed() { // Launch the tongue on click (if it's not launched ye
 
 
 
-
-
-
-
-
 /* ANIMATION */ 
-
 
 /* Moves flyTrap */
 function moveFlyTrap() { // Moves the flyTrap to the mouse position on x 
@@ -430,12 +411,6 @@ function drawFlyTrap() { // Displays the tongue (tip and line connection) and th
     pop();
 }
 
-/* Animate "gulp" */ 
-function gulp() {
-    // Fly swallowed 
-}
-
-
 /* Sky Graphics */ 
 function drawSky() {
     background(0);
@@ -461,10 +436,8 @@ function drawSky() {
         background(255); 
     }
 
-   
 
     // Background Flytraps 
-    //flyTraps.filter(THRESHOLD);
     flyTrapsBug.resize(width-100, 0); 
     image(flyTrapsBug, 50, 0);
 
@@ -479,8 +452,7 @@ function drawSky() {
 }
 
 
-/* DE BUGGING  */
-
+/* "Debugs" game when bugs are caught  */
 function deBug() {
     if(!bug[7]) { // Bug 7
         flyTrapLeftBug.filter(THRESHOLD);
@@ -506,6 +478,7 @@ function deBug() {
     
 }
 
+/* Adds the bugs back into the game */ 
 function reBug() {
     flyTrapLeft = loadImage('assets/images/flytrapleft.png'); 
     flyTrapRight = loadImage('assets/images/flytrapright.png'); 
