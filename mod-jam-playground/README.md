@@ -14,17 +14,17 @@ By: Skyla Trousdale
 
 ## Screenshot(s)
 
-> ![Image of bug 0](./assets/images/readme/bug0.png)
-> ![Image of bug 1](./assets/images/readme/bug1.png)
-> ![Image of bug 2](./assets/images/readme/bug2.png)
-> ![Image of bug 3](./assets/images/readme/bug3.png)
-> ![Image of bug 4](./assets/images/readme/bug4.png)
-> ![Image of bug 5](./assets/images/readme/bug5.png)
-> ![Image of bug 6](./assets/images/readme/bug6.png)
-> ![Image of bug 7](./assets/images/readme/bug7.png)
-> ![Image of bug 8](./assets/images/readme/bug8.png)
-> ![Image of bug 9](./assets/images/readme/bug9.png)
-> ![Image of bug 10](./assets/images/readme/bug10.png)
+> ![Image of bug 0](./assets/readme/bug0.png)
+> ![Image of bug 1](./assets/readme/bug1.png)
+> ![Image of bug 2](./assets/readme/bug2.png)
+> ![Image of bug 3](./assets/readme/bug3.png)
+> ![Image of bug 4](./assets/readme/bug4.png)
+> ![Image of bug 5](./assets/readme/bug5.png)
+> ![Image of bug 6](./assets/readme/bug6.png)
+> ![Image of bug 7](./assets/readme/bug7.png)
+> ![Image of bug 8](./assets/readme/bug8.png)
+> ![Image of bug 9](./assets/readme/bug9.png)
+> ![Image of bug 10](./assets/readme/bug10.png)
 
 ## Attribution
 
