@@ -26,9 +26,9 @@ This bit should attribute any code, assets or other elements used taken from oth
 
 > - This project uses [p5.js](https://p5js.org).
 > - This project uses sound files by Aphex Twin on SoundCloud
-> - This project references the overall concept of this educational video https://www.youtube.com/watch?v=CR_XL192wXw
-> - This project references aspects of this Video Tutorial: https://youtu.be/J-siGcsK2k8
-> - This project references math from this video: https://www.youtube.com/watch?v=nqx_joZFLDI
+> - This project references the overall concept of these educational videos on chladni patterns. https://www.youtube.com/watch?v=CR_XL192wXw, https://youtu.be/J-siGcsK2k8
+> - This project uses graphing math taught by this p5 tutorial: https://www.youtube.com/watch?v=nqx_joZFLDI
+> - This project uses code taught by this p5 particle tutorial: https://www.youtube.com/watch?v=QlpadcXok8U
 
 
 

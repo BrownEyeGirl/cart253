@@ -15,97 +15,127 @@
  * Final: add 3 different song options 
  */
 
-"use strict";// --- particles and modes ---
-let particles = [];      // array of particles
-let num = 6000;          // number of particles
-let m = 3, n = 5;        // chladni mode numbers
-let minMN = 1, maxMN = 8;
+"use strict";
 
-let margin = 50;         // canvas margin for mapping
-let w1, w2, h1, h2;
 
-let threshold = 0.04;    // how close to node to stick
-let particleSpeed = 10;    // particle movement speed
+/* Particle Handlers */ 
+let particles = []; // array holds all particle objects
+let num = 6000;  // how many particles to simulate       
 
-// --- setup ---
+/* Chladni Numbers */ 
+let m = 3, n = 5; // chladni mode numbers (define the pattern shape) 
+let minMN = 1, maxMN = 8; // range for picking random modes
+let margin = 50; // margin for mapping coordinates into chladni space      
+let w1, w2, h1, h2; // width and height boundary handlers for mapping the canvas
+
+let threshold = 0.04; // how close particles must be to a node to “stick”
+let particleSpeed = 10; // speed of moving particles
+
+
+/**
+ * Setup Canvas
+ */
 function setup() {
-  createCanvas(600, 600);
-  w1 = margin; w2 = width - margin;
-  h1 = margin; h2 = height - margin;
+  createCanvas(600, 600); // create canvas
 
-  // create particles
-  for (let i = 0; i < num; i++) {
+  /* Assign boundaries */ 
+  w1 = margin; //  
+  w2 = width - margin;
+  h1 = margin; 
+  h2 = height - margin;
+
+  /* Create Particles */ 
+  for (let i = 0; i < num; i++) { 
     particles.push(new Particle());
   }
 
-  background(0);
+  background(0);  // clear the canvas
 }
+
 
 // --- draw ---
 function draw() {
-  background(0);  // no trails
+  background(0); 
+
+  // update and draw each particle
   for (let p of particles) {
     p.update();
     p.display();
   }
 }
 
-// --- chladni equation ---
+
+/**
+ * chladni equation:
+ * returns a value describing vibration at (x,y)
+ * values near zero correspond to nodal lines
+ */
 function chladni(x, y) {
-  // returns node value; abs(value) near 0 is a node
-  return cos(n * PI * x) * cos(m * PI * y) - cos(m * PI * x) * cos(n * PI * y);
+  return cos(n * PI * x) * cos(m * PI * y) 
+       - cos(m * PI * x) * cos(n * PI * y);
 }
 
-// --- particle class ---
+
+/**
+ * particle class:
+ * handles movement, sticking, and drawing
+ */
 class Particle {
+
+
   constructor() {
-    this.pos = createVector(random(width), random(height));
-    this.vel = p5.Vector.random2D().mult(random(0.5, particleSpeed));
-    this.stuck = false;
+    this.pos = createVector(random(width), random(height));  // assigns random starting position of each particle 
+    this.vel = p5.Vector.random2D().mult(random(0.5, particleSpeed)); // assigns random velocity to each particle 
+    this.stuck = false; // allows particle to move
   }
 
+
   update() {
-    if (this.stuck) return;
+    if (this.stuck) return; // skip if the particle is in its proper position 
+    this.pos.add(this.vel); // move particle by its random velocity amount 
 
-    this.pos.add(this.vel);
+    /* Code To Wrap Particles Arond Canvas */ 
+    if (this.pos.x < 0) {this.pos.x = width};
+    if (this.pos.x > width) {this.pos.x = 0};
+    if (this.pos.y < 0) {this.pos.y = height};
+    if (this.pos.y > height) {this.pos.y = 0};
 
-    // wrap around canvas edges
-    if (this.pos.x < 0) this.pos.x = width;
-    if (this.pos.x > width) this.pos.x = 0;
-    if (this.pos.y < 0) this.pos.y = height;
-    if (this.pos.y > height) this.pos.y = 0;
-
-    // map to [-1,1] for chladni eq
-    let x = map(this.pos.x, w1, w2, -1, 1);
+  
+    /* Allows Position of Particles to have Playful Variance From The Chladni Lines */
+    let x = map(this.pos.x, w1, w2, -1, 1);  
     let y = map(this.pos.y, h1, h2, -1, 1);
 
-    // stick if near node
+    /* */
     if (abs(chladni(x, y)) < threshold) {
-      this.stuck = true;
-      this.vel.mult(0);
+      this.stuck = true; // freeze particle
+      this.vel.mult(0); // stop movement
     }
-
-   }
+  }
 
   display() {
-    stroke(255);
-    strokeWeight(2);
+    stroke(255, 0, 200); // colours the dots white
+    strokeWeight(4);
     point(this.pos.x, this.pos.y);
   }
 }
 
-// --- mouse click ---
+
+// Activates new pattern when mouse pressed 
 function mousePressed() {
-  // new random mode
+  // choose new random mode numbers
   m = floor(random(minMN, maxMN));
   n = floor(random(minMN, maxMN));
+
+  // avoid symmetric boring mode
   if (m === n) {
      m++;
   }
 
-  // release particles
+  // reset all particles so they move again
   for (let p of particles) {
     p.stuck = false;
     p.vel = p5.Vector.random2D().mult(random(0.5, particleSpeed));
   }
 }
+
+
