@@ -85,7 +85,7 @@ class Particle {
       this.vel.mult(0);
     }
 
-  }
+   }
 
   display() {
     stroke(255);
