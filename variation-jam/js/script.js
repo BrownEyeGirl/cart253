@@ -12,56 +12,100 @@
  * 2. analyze the song’s frequency content  
  * 3. map the song's frequency content to the (m,n) modes
  * 
- * 
+ * Final: add 3 different song options 
  */
 
-"use strict";
+"use strict";// --- particles and modes ---
+let particles = [];      // array of particles
+let num = 6000;          // number of particles
+let m = 3, n = 5;        // chladni mode numbers
+let minMN = 1, maxMN = 8;
 
-// set up grid for frequencies 
-let cols, rows; 
-let size = 1;
-let m = 5; 
+let margin = 50;         // canvas margin for mapping
+let w1, w2, h1, h2;
 
-// set up math for frequencies 
-let n = 4; 
-let threshold = 0.05;
+let threshold = 0.04;    // how close to node to stick
+let particleSpeed = 10;    // particle movement speed
 
-// setup of the page 
+// --- setup ---
 function setup() {
-  createCanvas(400, 400);
-  cols = width/size;
-  rows = height/size;
-}
+  createCanvas(600, 600);
+  w1 = margin; w2 = width - margin;
+  h1 = margin; h2 = height - margin;
 
-// draws grid and maps frequencies  
-function draw() {
-  background(220);
-  noStroke();
-  for (let i=0; i<cols; i++) {
-    for (let j=0; j<rows; j++) {
-      let x = map(i, 0, cols, 0, 1);
-      let y = map(j, 0, rows, 0, 1);
-      let val = chladni(x, y); 
-      
-      if (abs(val) < threshold) {
-        fill(0);
-      } else {
-        fill(255);
-      }
-      
-      rect(i*size, j*size, size, size);
-    }
+  // create particles
+  for (let i = 0; i < num; i++) {
+    particles.push(new Particle());
   }
-  
-  noLoop();
+
+  background(0);
 }
 
-// math (found on youtube tutorial)
-function chladni(x, y) {
-  let L = 1;
-  return cos(n * PI * x / L) * cos(m * PI * y / L) - 
-         cos(m * PI * x / L) * cos(n * PI * y / L);
+// --- draw ---
+function draw() {
+  background(0);  // no trails
+  for (let p of particles) {
+    p.update();
+    p.display();
+  }
 }
-  
-  
-  
+
+// --- chladni equation ---
+function chladni(x, y) {
+  // returns node value; abs(value) near 0 is a node
+  return cos(n * PI * x) * cos(m * PI * y) - cos(m * PI * x) * cos(n * PI * y);
+}
+
+// --- particle class ---
+class Particle {
+  constructor() {
+    this.pos = createVector(random(width), random(height));
+    this.vel = p5.Vector.random2D().mult(random(0.5, particleSpeed));
+    this.stuck = false;
+  }
+
+  update() {
+    if (this.stuck) return;
+
+    this.pos.add(this.vel);
+
+    // wrap around canvas edges
+    if (this.pos.x < 0) this.pos.x = width;
+    if (this.pos.x > width) this.pos.x = 0;
+    if (this.pos.y < 0) this.pos.y = height;
+    if (this.pos.y > height) this.pos.y = 0;
+
+    // map to [-1,1] for chladni eq
+    let x = map(this.pos.x, w1, w2, -1, 1);
+    let y = map(this.pos.y, h1, h2, -1, 1);
+
+    // stick if near node
+    if (abs(chladni(x, y)) < threshold) {
+      this.stuck = true;
+      this.vel.mult(0);
+    }
+
+  }
+
+  display() {
+    stroke(255);
+    strokeWeight(2);
+    point(this.pos.x, this.pos.y);
+  }
+}
+
+// --- mouse click ---
+function mousePressed() {
+  // new random mode
+  m = floor(random(minMN, maxMN));
+  n = floor(random(minMN, maxMN));
+  if (m === n) {
+     m++;
+  }
+
+  // release particles
+  for (let p of particles) {
+    p.stuck = false;
+    p.vel = p5.Vector.random2D().mult(random(0.5, particleSpeed));
+  }
+}
