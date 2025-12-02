@@ -113,29 +113,32 @@ class Particle {
   }
 
   display() {
-    stroke(255, 0, 200); // colours the dots white
+    stroke(random(140, 255), 0, random(100, 210)); // colours the dots white
     strokeWeight(4);
     point(this.pos.x, this.pos.y);
   }
 }
 
 
-// Activates new pattern when mouse pressed 
+/* Randomizes New Pattern when Mouse Pressed */ 
 function mousePressed() {
+
   // choose new random mode numbers
   m = floor(random(minMN, maxMN));
   n = floor(random(minMN, maxMN));
 
-  // avoid symmetric boring mode
+  // makes sure program doesn't freeze 
   if (m === n) {
-     m++;
-  }
+    m++;
+ }
 
-  // reset all particles so they move again
+  // resets all particles to fluid state 
   for (let p of particles) {
     p.stuck = false;
     p.vel = p5.Vector.random2D().mult(random(0.5, particleSpeed));
   }
 }
+
+
 
 
