@@ -37,9 +37,20 @@ let w1, w2, h1, h2; // width and height boundary handlers for mapping the canvas
 
 
 /* Music + Sound Variables */ 
+let song; 
+let fft; 
+let amp; 
+let bassEnergy; 
+let midEnergy; 
+let trebleEnergy; 
+let volume; 
 
-
-
+/**
+ * Preload Song 
+ * */
+function preload() {
+  song = loadSound('assets/sounds/prememory.mp3');
+}
 
 /**
  * Setup Canvas + Initial Values 
@@ -63,10 +74,10 @@ function setup() {
   }
 
   /* Music Loaders */
- // song.play();
- // fft = new p5.FFT(0.9, 1024); // smoothing = 0.9, 1024 frequency bins
-
-
+  fft = new p5.FFT(0.9, 1024); // smoothing = 0.9, 1024 frequency bins (recommended)
+  amp = new p5.Amplitude(); 
+  song.play(); 
+  
 }
 
 
@@ -75,12 +86,16 @@ function setup() {
  * */ 
 function draw() {
   background(0); 
+  getFrequencies(); 
 
-  // update and draw each particle
+
+  /* Update and draw each particle */ 
   for (let p of particles) {
     p.update();
     p.display();
   }
+
+  //rect(width/2, height/2, trebleEnergy, bassEnergy); // rect to show bass energy 
 }
 
 
@@ -144,6 +159,8 @@ class Particle {
  * */ 
 function mousePressed() {
 
+
+
   // choose new random mode numbers
   m = floor(random(minMN, maxMN));
   n = floor(random(minMN, maxMN));
@@ -162,10 +179,19 @@ function mousePressed() {
 
 
 /* Calculates frequency of a song */ 
-function getFrequency() {
+function getFrequencies() {
   
-    let spectrum = fft.analyze(); // array amplitude values (0-255)
+    let spectrum = fft.analyze(); // array amplitude values (0-255) https://p5js.org/reference/p5.FFT/analyze/
   
+    bassEnergy = fft.getEnergy("bass");
+    midEnergy = fft.getEnergy("mid"); 
+    trebleEnergy = fft.getEnergy("treble");
+
+    volume = amp.getLevel(); 
+
+    //console.log(topEnergy); 
+
+    /*
     // find dominant frequency
     let maxAmp = 0;
     let dominantFreq = 0;
@@ -176,7 +202,7 @@ function getFrequency() {
       }
     }
   
-    console.log("dominant frequency:", dominantFreq);
+    console.log("dominant frequency:", dominantFreq); */ 
   
 }
 
