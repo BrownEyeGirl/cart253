@@ -24,7 +24,7 @@
 let particles = []; // array holds all particle objects
 let num = 4000;  // how many particles to simulate     
 let threshold = 0.04; // how close particles must be to a node to “stick”
-let particleSpeed = 1; // speed of moving particles  
+let particleSpeed = 10; // speed of moving particles  
 
 /* Chladni Numbers */ 
 let m = 3, n = 5; // chladni mode numbers (define the pattern shape) 
@@ -54,6 +54,7 @@ let maxIntervals = 8;     // averages last 8 intervals
 let bpm = 0;
 let bpmFound = false; // to keep sand floating until bpm is found
 let scatterIntervals = 0; 
+let nextTriggerTime = 0;
 
 /**
  * Preload Song 
@@ -103,8 +104,17 @@ function draw() {
   getFrequencies(); 
 
   /* Beat on BPM Intervals */ 
-  findSpike(); 
+
+   // findSpike(); 
   //if(!bpmFound) newPattern(); 
+ 
+    let intervalBeat = (60 / bpm) * 1000 * 2;  // two beats
+
+    if (millis() >= nextTriggerTime) {
+      nextTriggerTime = millis() + intervalBeat;
+      newPattern(); 
+    }   
+
 
 
 
@@ -207,6 +217,8 @@ function newPattern() {
   m = floor(random(minMN, maxMN));
   n = floor(random(minMN, maxMN));
 
+  //m = map(bassEnergy, 0, 200)  //if()
+
   // makes sure program doesn't freeze (prevents error in chlandi numbers when both are zero) 
   if (m === n) {
     m++;
@@ -226,16 +238,10 @@ function getFrequencies() {
   let spectrum = fft.analyze(); // array amplitude values (0-255) https://p5js.org/reference/p5.FFT/analyze/
 
   lastBass=bassEnergy; 
-  bassEnergy = fft.getEnergy("bass");
-  //console.log(bassEnergy);
-  // detect spike in bass
-  if (bassEnergy > lastBass * bassThreshold && bassEnergy > 50) {
-    //setTimeout(bassSpiked(), 30000); 
-    // this is where you'd trigger your Chladni pattern change
-  }
-
-  midEnergy = fft.getEnergy("mid"); 
-  trebleEnergy = fft.getEnergy("treble");
+  bassEnergy = fft.getEnergy(20, 200);
+  //console.log(bassEnergy);  
+  midEnergy = fft.getEnergy(200, 2000); 
+  trebleEnergy = fft.getEnergy(2000, 8000);
 
   volume = amp.getLevel(); 
 
@@ -278,11 +284,7 @@ function findSpike() {
   if (bassEnergy > lastBass * bassThreshold && bassEnergy > 30) {
     spike = true;
     bpmFound = true; 
-    if(scatterIntervals = 4) {
-      newPattern(); 
-      scatterIntervals = 0
-    }
-    scatterIntervals++; 
+   
   }
   lastBass = bassEnergy;
 
@@ -290,7 +292,7 @@ function findSpike() {
   if (spike) {
     let now = millis();
 
-    if (lastSpikeTime > 0) {
+    if (lastSpikeTime > 100) {
       let interval = now - lastSpikeTime; // ms between spikes
       intervals.push(interval);
 
