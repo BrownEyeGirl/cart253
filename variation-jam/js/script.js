@@ -46,8 +46,14 @@ let lastBass;
 let midEnergy; 
 let trebleEnergy; 
 let volume; 
-let bpm = 120; // Manually set the BPM after finding it externally
-let beatInterval; // 
+
+/* calculate BPM */ 
+let lastSpikeTime = 0;
+let intervals = [];       // stores Δt between spikes
+let maxIntervals = 8;     // averages last 8 intervals
+let bpm = 0;
+let bpmFound = false; // to keep sand floating until bpm is found
+let scatterIntervals = 0; 
 
 /**
  * Preload Song 
@@ -96,6 +102,11 @@ function draw() {
   background(0); 
   getFrequencies(); 
 
+  /* Beat on BPM Intervals */ 
+  findSpike(); 
+  //if(!bpmFound) newPattern(); 
+
+
 
   /* Update and draw each particle */ 
   for (let p of particles) {
@@ -104,6 +115,9 @@ function draw() {
   }
 
   rect(width/2, height/2, trebleEnergy, trebleEnergy); // rect to show bass energy 
+
+
+
 }
 
 function playSong() {
@@ -163,6 +177,7 @@ class Particle {
     strokeWeight(2);
     point(this.pos.x, this.pos.y);
   }
+
 }
 
 
@@ -170,8 +185,6 @@ class Particle {
  * Randomizes New Pattern when Mouse Pressed 
  * */ 
 function mousePressed() {
-
-
 
   // choose new random mode numbers
   m = floor(random(minMN, maxMN));
@@ -190,69 +203,109 @@ function mousePressed() {
 }
 
 function newPattern() {
-
-  if(trebleEnergy )
   // choose new random mode numbers
-  m = a;
-  n = b;
+  m = floor(random(minMN, maxMN));
+  n = floor(random(minMN, maxMN));
 
   // makes sure program doesn't freeze (prevents error in chlandi numbers when both are zero) 
   if (m === n) {
     m++;
- }
+}
 
   // resets all particles to fluid state 
   for (let p of particles) {
     p.stuck = false;
     p.vel = p5.Vector.random2D().mult(random(0.5, particleSpeed));
   }
+  
 }
 
 /* Calculates frequency of a song */ 
 function getFrequencies() {
   
-    let spectrum = fft.analyze(); // array amplitude values (0-255) https://p5js.org/reference/p5.FFT/analyze/
-  
-    lastBass=bassEnergy; 
-    bassEnergy = fft.getEnergy("bass");
-    //console.log(bassEnergy);
-    // detect spike in bass
-    if (bassEnergy > lastBass * bassThreshold && bassEnergy > 50) {
-      //setTimeout(bassSpiked(), 30000); 
-      // this is where you'd trigger your Chladni pattern change
+  let spectrum = fft.analyze(); // array amplitude values (0-255) https://p5js.org/reference/p5.FFT/analyze/
+
+  lastBass=bassEnergy; 
+  bassEnergy = fft.getEnergy("bass");
+  //console.log(bassEnergy);
+  // detect spike in bass
+  if (bassEnergy > lastBass * bassThreshold && bassEnergy > 50) {
+    //setTimeout(bassSpiked(), 30000); 
+    // this is where you'd trigger your Chladni pattern change
+  }
+
+  midEnergy = fft.getEnergy("mid"); 
+  trebleEnergy = fft.getEnergy("treble");
+
+  volume = amp.getLevel(); 
+
+  //console.log(topEnergy); 
+
+  /*
+  // find dominant frequency
+  let maxAmp = 0;
+  let dominantFreq = 0;
+  for (let i = 0; i < spectrum.length; i++) {
+    if (spectrum[i] > maxAmp) {
+      maxAmp = spectrum[i];
+      dominantFreq = fft.getFreq(i); // frequency corresponding to bin i
     }
+  }
 
-    midEnergy = fft.getEnergy("mid"); 
-    trebleEnergy = fft.getEnergy("treble");
+  console.log("dominant frequency:", dominantFreq); */ 
 
-    volume = amp.getLevel(); 
-
-    //console.log(topEnergy); 
-
-    /*
-    // find dominant frequency
-    let maxAmp = 0;
-    let dominantFreq = 0;
-    for (let i = 0; i < spectrum.length; i++) {
-      if (spectrum[i] > maxAmp) {
-        maxAmp = spectrum[i];
-        dominantFreq = fft.getFreq(i); // frequency corresponding to bin i
-      }
-    }
-  
-    console.log("dominant frequency:", dominantFreq); */ 
-  
 }
 
 
 
 function bassSpiked() {
-    console.log("BASS SPIKE!", bassEnergy);
-
+  console.log("BASS SPIKE!", bassEnergy);
 }
 
 
 function showStats() {
   fill(255);
   text('hi', 50, 50);
+}
+
+
+/**
+ * Finds Spike in Bass and Triggers newPattern()  
+ */
+function findSpike() {
+  /* Bass Spike Direction */ 
+  let spike = false;
+  if (bassEnergy > lastBass * bassThreshold && bassEnergy > 30) {
+    spike = true;
+    bpmFound = true; 
+    if(scatterIntervals = 4) {
+      newPattern(); 
+      scatterIntervals = 0
+    }
+    scatterIntervals++; 
+  }
+  lastBass = bassEnergy;
+
+  /* If Bass Spike Detected */ 
+  if (spike) {
+    let now = millis();
+
+    if (lastSpikeTime > 0) {
+      let interval = now - lastSpikeTime; // ms between spikes
+      intervals.push(interval);
+
+      // keep number of intervals small
+      if (intervals.length > maxIntervals) {
+        intervals.shift();
+      }
+
+      // average the intervals
+      let avg = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+
+      // convert ms interval → BPM
+      bpm = 60000 / avg;
+    }
+
+    lastSpikeTime = now;
+  }
 }
