@@ -22,9 +22,9 @@
 
 /* Particle Handlers */ 
 let particles = []; // array holds all particle objects
-let num = 6000;  // how many particles to simulate     
+let num = 4000;  // how many particles to simulate     
 let threshold = 0.04; // how close particles must be to a node to “stick”
-let particleSpeed = 10; // speed of moving particles  
+let particleSpeed = 1; // speed of moving particles  
 
 /* Chladni Numbers */ 
 let m = 3, n = 5; // chladni mode numbers (define the pattern shape) 
@@ -41,9 +41,13 @@ let song;
 let fft; 
 let amp; 
 let bassEnergy; 
+let bassThreshold = 1.1; 
+let lastBass; 
 let midEnergy; 
 let trebleEnergy; 
 let volume; 
+let bpm = 120; // Manually set the BPM after finding it externally
+let beatInterval; // 
 
 /**
  * Preload Song 
@@ -76,8 +80,12 @@ function setup() {
   /* Music Loaders */
   fft = new p5.FFT(0.9, 1024); // smoothing = 0.9, 1024 frequency bins (recommended)
   amp = new p5.Amplitude(); 
-  song.play(); 
-  
+  //song.play(); 
+
+  /* Play Music */ 
+  let playButton = createButton('Play Song');
+  playButton.mouseClicked(playSong); 
+
 }
 
 
@@ -95,7 +103,11 @@ function draw() {
     p.display();
   }
 
-  //rect(width/2, height/2, trebleEnergy, bassEnergy); // rect to show bass energy 
+  rect(width/2, height/2, trebleEnergy, trebleEnergy); // rect to show bass energy 
+}
+
+function playSong() {
+  song.play(); 
 }
 
 
@@ -148,7 +160,7 @@ class Particle {
   /* Draws Particle in Position */ 
   display() {
     stroke(random(140, 255), random(0, 100), random(100, 210)); // colours the dots white
-    strokeWeight(4);
+    strokeWeight(2);
     point(this.pos.x, this.pos.y);
   }
 }
@@ -177,13 +189,39 @@ function mousePressed() {
   }
 }
 
+function newPattern() {
+
+  if(trebleEnergy )
+  // choose new random mode numbers
+  m = a;
+  n = b;
+
+  // makes sure program doesn't freeze (prevents error in chlandi numbers when both are zero) 
+  if (m === n) {
+    m++;
+ }
+
+  // resets all particles to fluid state 
+  for (let p of particles) {
+    p.stuck = false;
+    p.vel = p5.Vector.random2D().mult(random(0.5, particleSpeed));
+  }
+}
 
 /* Calculates frequency of a song */ 
 function getFrequencies() {
   
     let spectrum = fft.analyze(); // array amplitude values (0-255) https://p5js.org/reference/p5.FFT/analyze/
   
+    lastBass=bassEnergy; 
     bassEnergy = fft.getEnergy("bass");
+    //console.log(bassEnergy);
+    // detect spike in bass
+    if (bassEnergy > lastBass * bassThreshold && bassEnergy > 50) {
+      //setTimeout(bassSpiked(), 30000); 
+      // this is where you'd trigger your Chladni pattern change
+    }
+
     midEnergy = fft.getEnergy("mid"); 
     trebleEnergy = fft.getEnergy("treble");
 
@@ -206,3 +244,15 @@ function getFrequencies() {
   
 }
 
+
+
+function bassSpiked() {
+    console.log("BASS SPIKE!", bassEnergy);
+
+}
+
+
+function showStats() {
+  fill(255);
+  text('hi', 50, 50);
+}
