@@ -22,7 +22,7 @@
 
 /* Particle Handlers */ 
 let particles = []; // array holds all particle objects
-let num = 4000;  // how many particles to simulate     
+let num = 40000;  // how many particles to simulate     
 let threshold = 0.04; // how close particles must be to a node to “stick”
 let particleSpeed = 10; // speed of moving particles  
 
@@ -36,16 +36,29 @@ let margin = 50; // margin for mapping coordinates into chladni space
 let w1, w2, h1, h2; // width and height boundary handlers for mapping the canvas
 
 
-/* Music + Sound Variables */ 
-let song; 
+/* Music Variables */ 
+let song1; 
+let song2; 
+let song3
+let song1Playing = false; 
+let song2Playing = false; 
+let song3Playing = false; 
+let bpm1; 
+let bpm2; 
+let bpm3; 
+let currentBPM = 0; 
+
+/* Sound Variables */ 
 let fft; 
 let amp; 
+let lowBassEnergy; 
 let bassEnergy; 
 let bassThreshold = 1.1; 
 let lastBass; 
 let midEnergy; 
 let trebleEnergy; 
 let volume; 
+let dominantFreq; 
 
 /* calculate BPM */ 
 let lastSpikeTime = 0;
@@ -56,11 +69,21 @@ let bpmFound = false; // to keep sand floating until bpm is found
 let scatterIntervals = 0; 
 let nextTriggerTime = 0;
 
+
+/* Style Variables */ 
+let pinkTheme = false; 
+let dotColourR = 0; 
+let dotColourG = 0; 
+let dotColourB = 0; 
+
 /**
  * Preload Song 
  * */
 function preload() {
-  song = loadSound('assets/sounds/prememory.mp3');
+  song1 = loadSound('assets/sounds/butterfly.mp3'); // 144 bpm 
+  song2 =  loadSound('assets/sounds/mangle11.mp3'); // 95 bpm 
+  song3 = loadSound('assets/sounds/prememory.mp3'); // 111 bpm 
+
 }
 
 /**
@@ -84,14 +107,27 @@ function setup() {
     particles.push(new Particle());
   }
 
+
+  /* Assign BPM (replace w algorithm later) */ 
+  bpm1 = 144; 
+  bpm2 = 95; 
+  bpm3 = 111; 
+
   /* Music Loaders */
-  fft = new p5.FFT(0.9, 1024); // smoothing = 0.9, 1024 frequency bins (recommended)
+  fft = new p5.FFT(0.6, 1024); // smoothing = 0.9, 1024 frequency bins (recommended)
   amp = new p5.Amplitude(); 
   //song.play(); 
 
   /* Play Music */ 
-  let playButton = createButton('Play Song');
-  playButton.mouseClicked(playSong); 
+  let playButton1 = createButton('Play Song 1');
+  let playButton2 = createButton('Play Song 2');
+  let playButton3 = createButton('Play Song 3');
+
+  playButton1.mouseClicked(playSong1); 
+  playButton2.mouseClicked(playSong2);
+  playButton3.mouseClicked(playSong3);
+
+  nextTriggerTime = 1; 
 
 }
 
@@ -100,23 +136,37 @@ function setup() {
  * Draws Each Particle 
  * */ 
 function draw() {
-  background(0); 
+  if(pinkTheme) { background('#FFC9EA')}
+  else {background(0)}; 
   getFrequencies(); 
 
+  
   /* Beat on BPM Intervals */ 
 
    // findSpike(); 
   //if(!bpmFound) newPattern(); 
  
-    let intervalBeat = (60 / bpm) * 1000 * 2;  // two beats
+    /*if (!isFinite(currentBPM) || currentBPM <= 0) {
+      
+      return; // cuts program if current bpm is zero 
+    }*/
+
+  if(currentBPM <= 0) {
+    newPattern(); 
+  }
+
+  else {
+
+    let intervalBeat = (60 / currentBPM) * 1000 * 2;  // two beats
 
     if (millis() >= nextTriggerTime) {
       nextTriggerTime = millis() + intervalBeat;
-      newPattern(); 
-    }   
+      newPattern();
+    }  
 
+    //rect(width/2, height/2, lowBassEnergy, lowBassEnergy); // rect to show bass energy 
 
-
+  }
 
   /* Update and draw each particle */ 
   for (let p of particles) {
@@ -124,15 +174,68 @@ function draw() {
     p.display();
   }
 
-  rect(width/2, height/2, trebleEnergy, trebleEnergy); // rect to show bass energy 
 
+  
 
 
 }
 
-function playSong() {
-  song.play(); 
+function playSong1() {
+  console.log("playing song 1"); 
+  if(!song1Playing) {
+    song2.stop(); 
+    song3.stop(); 
+
+    song1.play(); 
+    song1Playing = true; 
+    pinkTheme = true; 
+    currentBPM = bpm1; 
+  }
+  else {
+    song1.stop(); 
+    song1Playing = false; 
+    
+
+  }
 }
+
+function playSong2() {
+  console.log("playing song 2"); 
+  if(!song2Playing) {
+    song1.stop(); 
+    song3.stop(); 
+    pinkTheme = false; 
+
+    song2.play(); 
+    song2Playing = true; 
+    currentBPM = bpm2; 
+  }
+  else {
+    song2.stop(); 
+    song2Playing = false; 
+  }
+}
+
+function playSong3() {
+
+  console.log("playing song 3"); 
+  if(!song3Playing) {
+    song1.stop(); 
+    song2.stop(); 
+    pinkTheme = false; 
+
+    song3.play(); 
+    song3Playing = true; 
+    currentBPM = bpm3; 
+  }
+  else {
+    song3.stop(); 
+    song3Playing = false; 
+  }
+}
+
+
+
 
 
 /**
@@ -181,41 +284,60 @@ class Particle {
     }
   }
 
+
   /* Draws Particle in Position */ 
   display() {
-    stroke(random(140, 255), random(0, 100), random(100, 210)); // colours the dots white
-    strokeWeight(2);
+    if(song1Playing) stroke(0); 
+    if(song2Playing) stroke(30, trebleEnergy, 30); 
+    if(song3Playing) stroke(30, 30, trebleEnergy); 
+
+    strokeWeight(map(bassEnergy, 90, 200, 1, 3));
     point(this.pos.x, this.pos.y);
   }
 
 }
 
 
-/**
- * Randomizes New Pattern when Mouse Pressed 
- * */ 
-function mousePressed() {
-
-  // choose new random mode numbers
-  m = floor(random(minMN, maxMN));
-  n = floor(random(minMN, maxMN));
-
-  // makes sure program doesn't freeze (prevents error in chlandi numbers when both are zero) 
-  if (m === n) {
-    m++;
- }
-
-  // resets all particles to fluid state 
-  for (let p of particles) {
-    p.stuck = false;
-    p.vel = p5.Vector.random2D().mult(random(0.5, particleSpeed));
-  }
-}
 
 function newPattern() {
   // choose new random mode numbers
-  m = floor(random(minMN, maxMN));
-  n = floor(random(minMN, maxMN));
+  //m = floor(random(minMN, maxMN));
+  //n = floor(random(minMN, maxMN));
+
+ // let centerPoint = 6; 
+  //let complexityLevel = map(dominantFreq, 255, 0, 0, 6); 
+
+  //m = centerPoint + complexityLevel; 
+  //n = centerPoint - complexityLevel; 
+
+  // map based on dominant frequency 
+
+  if(20 < dominantFreq <=85) {
+    m = floor(random(1, 3));
+    n = floor(random(1, 3));
+
+  }
+
+  if(85 < dominantFreq <= 170) {
+    m = floor(random(4, 5));
+    n = floor(random(4, 6));
+  }
+
+  if(170 < dominantFreq <= 255) {
+    m = floor(random(6, 12));
+    n = floor(random(6, 12)); 
+
+  }
+
+  //console.log(m,n); 
+
+  //m = floor(random(1, map(dominantFreq, 10, 500, 1, 20))); 
+  //n = floor(random(1, map(dominantFreq, 10, 500, 1, 20))); 
+
+
+
+ // console.log(dominantFreq); 
+ console.log(volume); 
 
   //m = map(bassEnergy, 0, 200)  //if()
 
@@ -232,13 +354,18 @@ function newPattern() {
   
 }
 
+
+
+
+
+
 /* Calculates frequency of a song */ 
 function getFrequencies() {
   
   let spectrum = fft.analyze(); // array amplitude values (0-255) https://p5js.org/reference/p5.FFT/analyze/
 
-  lastBass=bassEnergy; 
-  bassEnergy = fft.getEnergy(20, 200);
+  lowBassEnergy = fft.getEnergy(10, 50); 
+  bassEnergy = fft.getEnergy(90, 200);
   //console.log(bassEnergy);  
   midEnergy = fft.getEnergy(200, 2000); 
   trebleEnergy = fft.getEnergy(2000, 8000);
@@ -247,10 +374,10 @@ function getFrequencies() {
 
   //console.log(topEnergy); 
 
-  /*
-  // find dominant frequency
+  
+  /* Find dominant frequency */ 
   let maxAmp = 0;
-  let dominantFreq = 0;
+  dominantFreq = 0;
   for (let i = 0; i < spectrum.length; i++) {
     if (spectrum[i] > maxAmp) {
       maxAmp = spectrum[i];
@@ -258,14 +385,15 @@ function getFrequencies() {
     }
   }
 
-  console.log("dominant frequency:", dominantFreq); */ 
+  //console.log("dominant frequency:", dominantFreq); 
+
 
 }
 
 
 
 function bassSpiked() {
-  console.log("BASS SPIKE!", bassEnergy);
+  //console.log("BASS SPIKE!", bassEnergy);
 }
 
 
