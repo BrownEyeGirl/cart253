@@ -4,7 +4,7 @@
  * 
  * How it works 
  * 
- * 1. Make Chlandi Algorithm (based on book - link)
+ * 1. Make Chlandi Algorithm (based on content in read me)
     * m = number of nodal lines in one direction (up/down?)
     * n = number of nodal lines in the perpendicular direction (left/right)
     * ψ(x,y)=cos(nπx)cos(mπy)−cos(mπx)cos(nπy) <- equation (find source)
@@ -22,7 +22,7 @@
 
 /* Particle Handlers */ 
 let particles = []; // array holds all particle objects
-let num = 40000;  // how many particles to simulate     
+let num = 30000;  // how many particles to simulate  ADD SLIDER  
 let threshold = 0.04; // how close particles must be to a node to “stick”
 let particleSpeed = 10; // speed of moving particles  
 
@@ -304,11 +304,11 @@ function newPattern() {
   //m = floor(random(minMN, maxMN));
   //n = floor(random(minMN, maxMN));
 
- // let centerPoint = 6; 
-  //let complexityLevel = map(dominantFreq, 255, 0, 0, 6); 
+  let centerPoint = 6; 
+  //let complexityLevel = map(dominantFreq, 255, 0, 0, 2); 
 
-  //m = centerPoint + complexityLevel; 
-  //n = centerPoint - complexityLevel; 
+  //m = 2;//centerPoint + complexityLevel; 
+  //n = 12;//centerPoint - complexityLevel; 
 
   // map based on dominant frequency 
 

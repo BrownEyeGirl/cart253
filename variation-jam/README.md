@@ -1,39 +1,34 @@
-# TITLE OF PROJECT
+# VARIATION JAM - MUSIC VISUALIZER ALGORITHM 
 
-AUTHOR NAME
+SKYLA TROUSDALE 
 
-[View this project online](URL_FOR_THE_RUNNING_PROJECT)
+[View this project online](https://browneyegirl.github.io/cart253/variation-jam/)
 
 ## Description
 
-This description should help the reader understand what the program is, anything they should know to be able to experience it (controls, special features, etc.), and what the desired user experience is. For example:
-
-> *The Mayor of Clown Town* is a simulator experience that allows the user to control a small town populated entirely by clowns.
-
-> The experience is controlled via the mouse, with left click selecting a clown and bringing up a menu of options such as "slip of banana peel" or "get into impossible capacious clown-car."
-
-> The project is meant to give the user a sense of what it would be the mayor of a town of clowns, eventually getting the sense that clowns are not taking their civic duties seriously.
+> *VARIATION JAM - MUSIC VISUALIZER ALGORITHM* simulates Chladni sand patterns and synchs them up with the frequencies of a song. The size, colour, and arrangement of the sand is determined by the frequencies picked up by an FFT frequency analyzer making this algorithm universal and not limited to the songs I've provided
+> Click play song 1, 2, or 3 to stop/start the program. 
+> LOOKING FORWARD: I am working on developing an algorithm that takes desktop audio input using other javascript libraries so I can display it in my house. I will keep updating it. 
 
 ## Screenshot(s)
+![Screenshot 1](assets/screenshots/IMG_9713.png)
+![Screenshot 2](assets/screenshots/IMG_9260.png)
+![Screenshot 3](assets/screenshots/IMG_5091.png)
 
-This bit should have some images of the program running so that the reader has a sense of what it looks like. For example:
-
-> ![Image of a clown face](./assets/images/clown.png)
 
 ## Attribution
 
-This bit should attribute any code, assets or other elements used taken from other sources. For example:
-
 > - This project uses [p5.js](https://p5js.org).
 > - This project uses sound files by Aphex Twin on SoundCloud
-> - This project references the overall concept of these educational videos on chladni patterns. https://www.youtube.com/watch?v=CR_XL192wXw, https://youtu.be/J-siGcsK2k8
-> - This project uses graphing math taught by this p5 tutorial: https://www.youtube.com/watch?v=nqx_joZFLDI
+> - This project references the overall concept of these educational videos/articles on chladni patterns: 
+> - https://www.youtube.com/watch?v=CR_XL192wXw 
+> - https://youtu.be/J-siGcsK2k8
+> - https://www.dynamicmath.xyz/chladni-patterns/
+> - https://paulbourke.net/geometry/chladni/
+> - This project was debugged with graphing math taught by this p5 tutorial: https://www.youtube.com/watch?v=nqx_joZFLDI
 > - This project uses code taught by this p5 particle tutorial: https://www.youtube.com/watch?v=QlpadcXok8U
 
 
-
 ## License
-
-This bit should include the license you want to apply to your work. For example:
 
 > This project is licensed under a Creative Commons Attribution ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en)) license with the exception of libraries and other components with their own licenses.
