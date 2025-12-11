@@ -127,7 +127,7 @@ function setup() {
   playButton2.mouseClicked(playSong2);
   playButton3.mouseClicked(playSong3);
 
-  nextTriggerTime = 1; 
+  nextTriggerTime = 1; // how often beat is triggered 
 
 }
 
@@ -140,19 +140,21 @@ function draw() {
   else {background(0)}; 
   getFrequencies(); 
 
-  
+  findSpike(); 
   /* Beat on BPM Intervals */ 
 
    // findSpike(); 
   //if(!bpmFound) newPattern(); 
  
+  /* CODE TO TRIGGER NEW PATTERN ON BPM */ 
     /*if (!isFinite(currentBPM) || currentBPM <= 0) {
       
       return; // cuts program if current bpm is zero 
     }*/
 
+    /*
   if(currentBPM <= 0) {
-    newPattern(); 
+    //newPattern(); 
   }
 
   else {
@@ -161,8 +163,8 @@ function draw() {
 
     if (millis() >= nextTriggerTime) {
       nextTriggerTime = millis() + intervalBeat;
-      newPattern();
-    }  
+      //newPattern();
+    }  */
 
     //rect(width/2, height/2, lowBassEnergy, lowBassEnergy); // rect to show bass energy 
 
@@ -419,6 +421,8 @@ function findSpike() {
   /* If Bass Spike Detected */ 
   if (spike) {
     let now = millis();
+    console.log("spike!");
+    newPattern(); 
 
     if (lastSpikeTime > 100) {
       let interval = now - lastSpikeTime; // ms between spikes
