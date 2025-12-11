@@ -168,7 +168,7 @@ function draw() {
 
     //rect(width/2, height/2, lowBassEnergy, lowBassEnergy); // rect to show bass energy 
 
-  }
+  //}
 
   /* Update and draw each particle */ 
   for (let p of particles) {
