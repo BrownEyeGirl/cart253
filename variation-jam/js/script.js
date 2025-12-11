@@ -144,7 +144,7 @@ function draw() {
 
   getFrequencies(); 
 
-  findSpike(); 
+  //findSpike(); 
   /* Beat on BPM Intervals */ 
 
    // findSpike(); 
@@ -156,7 +156,7 @@ function draw() {
       return; // cuts program if current bpm is zero 
     }*/
 
-    /*
+    
   if(currentBPM <= 0) {
     //newPattern(); 
   }
@@ -167,12 +167,12 @@ function draw() {
 
     if (millis() >= nextTriggerTime) {
       nextTriggerTime = millis() + intervalBeat;
-      //newPattern();
-    }  */
+      newPattern();
+    }  
 
     //rect(width/2, height/2, lowBassEnergy, lowBassEnergy); // rect to show bass energy 
 
-  //}
+  }
 
   /* Update and draw each particle */ 
   for (let p of particles) {
@@ -294,7 +294,7 @@ class Particle {
   /* Draws Particle in Position */ 
   display() {
     if(song1Playing) stroke(0); 
-    if(song2Playing) stroke(30, trebleEnergy, 30); 
+    if(song2Playing) stroke(30, 30, trebleEnergy); 
     if(song3Playing) stroke(30, 30, trebleEnergy); 
 
     strokeWeight(map(bassEnergy, 90, 200, 1, 3));
@@ -307,25 +307,25 @@ class Particle {
 
 function newPattern() {
   // choose new random mode numbers
-  //m = floor(random(minMN, maxMN));
+  //m = floor(random(minMN, maxMN)); // between 1 and 8
   //n = floor(random(minMN, maxMN));
 
-  let centerPoint = 6; 
-  //let complexityLevel = map(dominantFreq, 255, 0, 0, 2); 
+  //let centerPoint =6; 
+  //let complexityLevel = map(dominantFreq, 255, 0, 1,4); 
 
-  //m = 2;//centerPoint + complexityLevel; 
-  //n = 12;//centerPoint - complexityLevel; 
+ // m = centerPoint + random(complexityLevel, complexityLevel+1); 
+ // n = centerPoint - random(complexityLevel, complexityLevel-1); 
 
   // map based on dominant frequency 
 
   if(20 < dominantFreq <=85) {
-    m = floor(random(1, 3));
-    n = floor(random(1, 3));
+    m = floor(random(1, 2));
+    n = floor(random(1, 2));
 
   }
 
   if(85 < dominantFreq <= 170) {
-    m = floor(random(4, 5));
+    m = floor(random(4, 6));
     n = floor(random(4, 6));
   }
 
@@ -449,7 +449,7 @@ function findSpike() {
 }
 
 /**
- * Finds Spike in Bass and Triggers newPattern()  
+ * Finds Volume Spike and Triggers newPattern()   (not in use)
  */
 function findVolumeSpike() {
   /* Bass Spike Direction */ 
