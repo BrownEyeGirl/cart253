@@ -75,6 +75,8 @@ let pinkTheme = false;
 let dotColourR = 0; 
 let dotColourG = 0; 
 let dotColourB = 0; 
+let backgroundColour = 0; 
+
 
 /**
  * Preload Song 
@@ -136,8 +138,10 @@ function setup() {
  * Draws Each Particle 
  * */ 
 function draw() {
-  if(pinkTheme) { background('#FFC9EA')}
-  else {background(0)}; 
+  if(pinkTheme) { backgroundColour = '#FFC9EA'}
+  else {backgroundColour = 0}; 
+  background(backgroundColour); 
+  
   getFrequencies(); 
 
   findSpike(); 
@@ -409,6 +413,45 @@ function showStats() {
  * Finds Spike in Bass and Triggers newPattern()  
  */
 function findSpike() {
+  /* Bass Spike Direction */ 
+  let spike = false;
+  if (bassEnergy > lastBass * bassThreshold && bassEnergy > 30) {
+    spike = true;
+    bpmFound = true; 
+   
+  }
+  lastBass = bassEnergy;
+
+  /* If Bass Spike Detected */ 
+  if (spike) {
+    let now = millis();
+    console.log("spike!");
+    newPattern(); 
+
+    if (lastSpikeTime > 100) {
+      let interval = now - lastSpikeTime; // ms between spikes
+      intervals.push(interval);
+
+      // keep number of intervals small
+      if (intervals.length > maxIntervals) {
+        intervals.shift();
+      }
+
+      // average the intervals
+      let avg = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+
+      // convert ms interval → BPM
+      bpm = 60000 / avg;
+    }
+
+    lastSpikeTime = now;
+  }
+}
+
+/**
+ * Finds Spike in Bass and Triggers newPattern()  
+ */
+function findVolumeSpike() {
   /* Bass Spike Direction */ 
   let spike = false;
   if (bassEnergy > lastBass * bassThreshold && bassEnergy > 30) {
