@@ -23,8 +23,8 @@
 /* Particle Handlers */ 
 let particles = []; // array holds all particle objects
 let num = 30000;  // how many particles to simulate  ADD SLIDER  
-let threshold = 0.04; // how close particles must be to a node to “stick”
-let particleSpeed = 10; // speed of moving particles  
+let threshold = 0.3; // how close particles must be to a node to “stick”
+let particleSpeed = 1; // speed of moving particles  
 
 /* Chladni Numbers */ 
 let m = 3, n = 5; // chladni mode numbers (define the pattern shape) 
@@ -141,7 +141,7 @@ function draw() {
   if(pinkTheme) { backgroundColour = '#FFC9EA'}
   else {backgroundColour = 0}; 
   background(backgroundColour); 
-  
+
   getFrequencies(); 
 
   findSpike(); 
