@@ -155,7 +155,7 @@ function draw() {
 
     findSpike(); 
     bassThreshold = (bassThresholdSlider.value())/100; 
-    particleSpeed = (particleSpeedSlider.value()); 
+    particleSpeed = (particleSpeedSlider.value());
 
 
     /* Beat on BPM Intervals */ 
@@ -252,9 +252,12 @@ class Particle {
 
   /* Draws Particle in Position */ 
     display() {
-        
-       stroke(30, 30, trebleEnergy); 
-
+        if(this.pos.x < 100) {
+            stroke(0); 
+        }
+        else {
+            stroke(130, 130, trebleEnergy); 
+        }
         strokeWeight(map(bassEnergy, 90, 200, 1, 3));
         point(this.pos.x, this.pos.y);
     }
