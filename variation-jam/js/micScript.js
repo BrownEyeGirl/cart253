@@ -70,9 +70,14 @@ let backgroundColour = 0;
 
 
 /* Sliders */ 
-let container; 
-let label; 
+let container1; 
+let label1; 
 let bassThresholdSlider; 
+
+let container2; 
+let label2; 
+let particleSpeedSlider; 
+
 
 /**
  * Setup Canvas + Initial Values 
@@ -91,10 +96,11 @@ function setup() {
   h1 = margin; 
   h2 = height - margin;
 
-  /* Create Particles */ 
-  for (let i = 0; i < num; i++) { 
-    particles.push(new Particle());
-  }
+
+  createParticles(); 
+    /*for (let i = 0; i < num; i++) { 
+        particles.push(new Particle());
+    }*/
 
 
   /* SOUND */ 
@@ -110,21 +116,26 @@ function setup() {
 
 
     /* Sliders */
-    
+   // Slider 1
+   bassThresholdSlider = createSlider(80, 150, 110, 1);
+   bassThresholdSlider.addClass("bass-threshold-slider"); 
 
-   
-   container = createDiv();
-   container.addClass("slider-container");
+   container1 = createDiv();
+   container1.addClass("slider-container1");
 
-    label = createSpan("Bass Sensitivity");
-    label.addClass("slider-label");
+    label1 = createSpan("Bass Sensitivity: ");
+    label1.addClass("slider-label1");
 
-    bassThresholdSlider = createSlider(80, 150, 110, 1);
-    bassThresholdSlider.addClass("bass-threshold-slider"); 
-   // bassThresholdSlider = document.getElementById("bassThresholdSlider");
+    label1.parent(container1);
+    bassThresholdSlider.parent(container1);
 
-    label.parent(container);
-     bassThresholdSlider.parent(container);
+    // Slider 2
+    particleSpeedSlider = createSlider(1, 20, 10, 1); 
+    container2 = createDiv(); 
+    label2 = createSpan("Particle Speed: "); 
+
+    label2.parent(container2);
+    particleSpeedSlider.parent(container2); 
 
     //bassThresholdSlider = createSlider(80, 150, 110, 1);
     //bassThresholdSlider.addClass("bass-threshold-slider"); 
@@ -137,19 +148,17 @@ function setup() {
  * Draws Each Particle 
  * */ 
 function draw() {
+    background(255); 
+    //newPattern(); 
 
-    /* Slider Manager */
+    getFrequencies(); 
+
+    findSpike(); 
     bassThreshold = (bassThresholdSlider.value())/100; 
-    console.log(bassThreshold);
+    particleSpeed = (particleSpeedSlider.value()); 
 
- background(255); 
-//newPattern(); 
 
-  getFrequencies(); 
-
-  findSpike(); 
-  bassThreshold = (bassThresholdSlider.value())/100; 
-  /* Beat on BPM Intervals */ 
+    /* Beat on BPM Intervals */ 
 
    // findSpike(); 
   //if(!bpmFound) newPattern(); 
@@ -193,6 +202,15 @@ function chladni(x, y) {
        - cos(m * PI * x) * cos(n * PI * y);
 }
 
+/**
+ *  Create Particles 
+ */ 
+function createParticles() {
+    for (let i = 0; i < num; i++) { 
+        particles.push(new Particle());
+    }
+}
+
 
 /**
  * Particle Class: Handles Particle Movement, Lines, and Particle Drawing (from particle video tutorial referenced in README.md)
@@ -204,6 +222,8 @@ class Particle {
         this.pos = createVector(random(width), random(height));  // assigns random starting position of each particle 
         this.vel = p5.Vector.random2D().mult(random(0.5, particleSpeed)); // assigns random velocity to each particle 
         this.stuck = false; // allows particle to move
+        //this.glint = 5; // test - glint effect (alpha for the stroke?)
+        //this.gpol = 0; // up and down movement
     }
 
     /* Moves Particles into Nodal Lines with vibration value near zero */ 
