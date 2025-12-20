@@ -22,7 +22,7 @@
 
 /* Particle Handlers */ 
 let particles = []; // array holds all particle objects
-let num = 30000;  // how many particles to simulate  ADD SLIDER  
+let num = 60000;  // how many particles to simulate  ADD SLIDER  
 let threshold = 0.3; // how close particles must be to a node to “stick”
 let particleSpeed = 1; // speed of moving particles  
 
@@ -77,6 +77,8 @@ let dotColourG = 0;
 let dotColourB = 0; 
 let backgroundColour = 0; 
 
+/* Live Audio In */ 
+let mic; 
 
 /**
  * Preload Song 
@@ -131,6 +133,16 @@ function setup() {
 
   nextTriggerTime = 1; // how often beat is triggered 
 
+
+  /* Live Mic Experiment */ 
+   // Create an Audio input
+  mic = new p5.AudioIn();
+
+  // start the Audio Input.
+  // By default, it does not .connect() (to the computer speakers)
+  mic.start();
+
+
 }
 
 
@@ -138,6 +150,10 @@ function setup() {
  * Draws Each Particle 
  * */ 
 function draw() {
+
+  console.log("vol: ", mic.getLevel()); 
+
+
   if(pinkTheme) { backgroundColour = '#FFC9EA'}
   else {backgroundColour = 0}; 
   background(backgroundColour); 
@@ -185,6 +201,18 @@ function draw() {
 
 
 }
+
+
+/* Gets Various info from the mic audio input */ 
+
+function audioInFrequencyAnalyzer() {
+
+
+
+
+}
+
+
 
 function playSong1() {
   console.log("playing song 1"); 
@@ -375,8 +403,8 @@ function getFrequencies() {
   //console.log(bassEnergy);  
   midEnergy = fft.getEnergy(200, 2000); 
   trebleEnergy = fft.getEnergy(2000, 8000);
-
   volume = amp.getLevel(); 
+  console.log("Vol: " + volume); 
 
   //console.log(topEnergy); 
 
