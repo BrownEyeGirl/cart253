@@ -23,7 +23,7 @@
 /* Particle Handlers */ 
 let particles = []; // array holds all particle objects
 let num = 60000;  // how many particles to simulate  ADD SLIDER  
-let threshold = 0.3; // how close particles must be to a node to “stick”
+let threshold = 0.1; // how close particles must be to a node to “stick”
 let particleSpeed = 1; // speed of moving particles  
 
 /* Chladni Numbers */ 
@@ -112,9 +112,9 @@ function setup() {
     /* Sliders */
     
 
-   /* 
-    container = createDiv();
-    container.addClass("slider-container");
+   
+   container = createDiv();
+   container.addClass("slider-container");
 
     label = createSpan("Bass Sensitivity");
     label.addClass("slider-label");
@@ -124,10 +124,10 @@ function setup() {
    // bassThresholdSlider = document.getElementById("bassThresholdSlider");
 
     label.parent(container);
-    bassThresholdSlider.parent(container);*/
+     bassThresholdSlider.parent(container);
 
-    bassThresholdSlider = createSlider(80, 150, 110, 1);
-    bassThresholdSlider.addClass("bass-threshold-slider"); 
+    //bassThresholdSlider = createSlider(80, 150, 110, 1);
+    //bassThresholdSlider.addClass("bass-threshold-slider"); 
 
 
 }
