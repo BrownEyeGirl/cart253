@@ -22,7 +22,7 @@
 
 /* Particle Handlers */ 
 let particles = []; // array holds all particle objects
-let num = 60000;  // how many particles to simulate  ADD SLIDER  
+let num = 10000;  // how many particles to simulate  ADD SLIDER  
 let threshold = 0.1; // how close particles must be to a node to “stick”
 let particleSpeed = 1; // speed of moving particles  
 
@@ -67,6 +67,7 @@ let dotColourR = 0;
 let dotColourG = 0; 
 let dotColourB = 0; 
 let backgroundColour = 0; 
+let distVal = 1; 
 
 
 /* Sliders */ 
@@ -263,17 +264,33 @@ class Particle {
     }
 
 
-  /* Draws Particle in Position */ 
+  /* Draws Particle in Position (GRAPHIC COMPONENTS HERE) */ 
     display() {
-       if(this.pos.x < 100) {
-            stroke(255); 
+       /*if(this.pos.x < 100 && this.pos.y < 100) {
+            stroke(100); 
+            strokeWeight(map(dist(width/4, height/4, this.pos.x, this.pos.y, 0, 100, 2, 8))); 
         }
         else {
             stroke(255); 
-        }
+            strokeWeight(map(bassEnergy, 90, 200, 1, 4));
+        }*/
+
+        //let shade = map(dist(width/2, height/2, this.pos.x, this.pos.y), 0, width/2, 1, 255));
+        distVal = dist(width/2, height/2, this.pos.x, this.pos.y)
+        stroke(dist(width,random(200, 600), this.pos.x, this.pos.y), distVal/2, dist(0,random(0, 100), this.pos.x, this.pos.y)/2); 
+       // stroke(255);
+        //console.log(dist(width/2, height/2, this.pos.x, this.pos.y));
+        //strokeWeight()
+
        //stroke(0);
-        strokeWeight(map(bassEnergy, 90, 200, 1, 4));
-        point(this.pos.x, this.pos.y);
+       //strokeWeight(dist(width/4, height/4, this.pos.x, this.pos.y))
+       if(distVal <= width/2) {
+        strokeWeight(map(bassEnergy, 90, 200, 1, 2)*random(1, map(distVal, 0, width/2, 5, 1))  );
+       }
+       else {
+        strokeWeight(1)
+       }
+       point(this.pos.x, this.pos.y);
     }
 
 }
